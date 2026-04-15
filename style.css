@@ -1,0 +1,58 @@
+<!-- ================= CSS (style.css) ================= -->
+}
+
+.hidden { display: none; }
+
+.app {
+  display: flex;
+}
+
+.sidebar {
+  width: 220px;
+  background: #0d0d0d;
+  padding: 20px;
+}
+
+.sidebar h1 {
+  text-align: center;
+  color: #7a00ff;
+}
+
+.sidebar button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  background: #111;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+.sidebar button.active {
+  background: #7a00ff;
+}
+
+.content {
+  flex: 1;
+  padding: 30px;
+}
+
+.tab { display: none; }
+.tab.active { display: block; }
+
+.card {
+  background: #111;
+  padding: 15px;
+  margin-top: 10px;
+  cursor: pointer;
+  border-left: 3px solid #7a00ff;
+}
+
+.card-content {
+  display: none;
+  margin-top: 10px;
+}
+
+.card.open .card-content {
+  display: block;
+}

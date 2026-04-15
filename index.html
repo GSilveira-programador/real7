@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Real7 - Sistema</title>
+
+  <!-- CSS CORRETO -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- LOADING -->
+<div id="loader">REAL7 ACCESS...</div>
+
+<div class="app hidden">
+  
+  <!-- MENU LATERAL -->
+  <aside class="sidebar">
+    <h1>REAL7</h1>
+
+    <button onclick="openTab('historia', this)" class="active">História</button>
+    <button onclick="openTab('objetivo', this)">Objetivo</button>
+    <button onclick="openTab('lideranca', this)">Liderança</button>
+    <button onclick="openTab('recrutamento', this)">Recrutamento</button>
+    <button onclick="openTab('rp', this)">RP</button>
+    <button onclick="openTab('stream', this)">Streaming</button>
+    <button onclick="openTab('uniforme', this)">Uniforme</button>
+  </aside>
+
+  <!-- CONTEÚDO -->
+  <main class="content">
+
+    <section id="historia" class="tab active">
+      <h2>📜 História da Família</h2>
+      <div class="card" onclick="toggleCard(this)">
+        Clique para abrir
+        <div class="card-content">
+          A Real7 surgiu de uma insatisfação. A maioria dos membros que hoje fazem parte da família já passou por outras organizações dentro da cidade, e em praticamente todas elas vimos o mesmo erro se repetir: falta de estrutura, decisões impulsivas e ausência de um RP bem construído. Não foi algo que nasceu do dia pra noite. A Real7 começou com um grupo pequeno, formado por pessoas que pensavam parecido mais cabeça, menos impulso. Com o tempo, esse grupo foi crescendo, mas sempre mantendo um critério: não entrar qualquer um, e sim pessoas que realmente agregassem. O nome “Real7” veio da ideia inicial de 7 pilares que sustentam a família: Respeito Lealdade Disciplina Estratégia Visão Controle Evolução A gente não busca ser a maior família da cidade, e sim uma das mais organizadas e respeitadas. Hoje, a Real7 já funciona como uma família estruturada, com hierarquia definida, comunicação organizada e uma visão clara de como atuar dentro do RP.
+        </div>
+      </div>
+    </section>
+
+    <section id="objetivo" class="tab">
+      <h2>🎯 Por que Queremos Assumir uma Facção na Zer01</h2>
+      <div class="card" onclick="toggleCard(this)">
+        Clique para abrir
+        <div class="card-content">
+          Nosso principal motivo é simples: queremos agregar. A gente vê muito potencial na cidade, mas também vemos que muitas vezes o RP acaba ficando repetitivo ou sem construção. A Real7 vem justamente pra mudar isso. Queremos assumir uma facção pra: Criar histórias dentro da cidade (não só ações aleatórias) Gerar interação com outras facções e com a polícia Movimentar o servidor de forma saudável Trazer um RP mais organizado e pensado Outro ponto importante é que a maioria dos membros pretende fazer live, então além de jogar, também queremos divulgar o servidor, mostrar o RP acontecendo e ajudar no crescimento da comunidade. Nosso objetivo não é dominar, é marcar presença.
+        </div>
+      </div>
+    </section>
+
+        <!-- LIDERANÇA -->
+    <section id="lideranca" class="tab">
+      <h2>🧠 Liderança e Gerência</h2>
+
+      <div class="members">
+
+  <div class="member-card">
+    <h3>👑 Drake</h3>
+    <p class="cargo">Líder</p>
+    <div class="skills">
+      • Forte visão estratégica<br>
+      • Liderança firme em momentos de pressão<br>
+      • Boa tomada de decisão<br>
+      • ID 410224706428338207<br>
+    </div>
+  </div>
+
+  <div class="member-card">
+    <h3>👑 Nike</h3>
+    <p class="cargo">Líder</p>
+    <div class="skills">
+      • Organização e controle da equipe<br>
+      • Comunicação clara<br>
+      • Capacidade de manter estabilidade da facção<br>
+      • ID 1489730192938242230<br>
+    </div>
+  </div>
+
+  <div class="member-card">
+    <h3>⚔️ John</h3>
+    <p class="cargo">Sub-líder</p>
+    <div class="skills">
+      • Execução eficiente de ações<br>
+      • Apoio direto à liderança<br>
+      • Boa leitura de situações em RP<br>
+      • ID 512018310913589248<br>
+    </div>
+  </div>
+
+  <div class="member-card">
+    <h3>⚔️ Silveira</h3>
+    <p class="cargo">Sub-líder</p>
+    <div class="skills">
+      • Perfil frio e calculista<br>
+      • Planejamento tático<br>
+      • Controle emocional em conflitos<br>
+      • ID 1226169175639326790<br>
+    </div>
+  </div>
+
+  <div class="member-card">
+    <h3>⚔️ Jamaica</h3>
+    <p class="cargo">Membro Estratégico</p>
+    <div class="skills">
+      • Versatilidade em ações<br>
+      • Apoio operacional<br>
+      • Adaptação rápida em situações de risco<br>
+      • ID 1438351000510529536<br>
+    </div>
+  </div>
+  
+  <div class="member-card">
+    <h3>💰 Celine</h3>
+    <p class="cargo">Gerente de Vendas</p>
+    <div class="skills">
+      • Habilidade em negociação<br>
+      • Organização de recursos<br>
+      • Gestão financeira da facção<br>
+      • ID 760636663536943124<br>
+    </div>
+  </div>
+
+  <div class="member-card">
+    <h3>📋 Pedro</h3>
+    <p class="cargo">Gerente de Recrutamento</p>
+    <div class="skills">
+      • Boa análise de novos membros<br>
+      • Critério na seleção<br>
+      • Identificação de perfis compatíveis<br>
+      • ID 1207458050248544420<br>
+    </div>
+  </div>
+
+  <div class="member-card">
+    <h3>🧩 Alice</h3>
+    <p class="cargo">Gerente Geral</p>
+    <div class="skills">
+      • Organização geral da equipe<br>
+      • Suporte à liderança<br>
+      • Controle interno e disciplina<br>
+      • ID 758888326563627027<br>
+    </div>
+  </div>
+
+      </div>
+
+      <div class="card" onclick="toggleCard(this)">
+        📌 Pontos Fortes da Liderança
+        <div class="card-content">
+          • Organização de equipes<br>
+          • Gerenciamento de conflitos<br>
+          • Planejamento estratégico<br>
+          • Criação de histórias no RP<br>
+          • Comunicação clara<br>
+          • Controle interno<br>
+          • Decisões estratégicas
+        </div>
+      </div>
+
+    </section>
+
+    <section id="recrutamento" class="tab">
+      <h2>👥 Ideias para Recrutamento de Novos Membros</h2>
+      <div class="card" onclick="toggleCard(this)">
+        Clique para abrir
+        <div class="card-content">
+          Nosso recrutamento não vai ser aberto de qualquer jeito. A Real7 pretende trabalhar com: Indicações internas (membros trazendo pessoas de confiança) Avaliação comportamental antes de entrar Período de teste (recruta) Observação dentro do RP Além disso, com as lives, vamos conseguir identificar pessoas que realmente querem jogar sério e trazer elas pra família. Não queremos quantidade, queremos qualidade.
+        </div>
+      </div>
+    </section>
+
+    <section id="rp" class="tab">
+      <h2>🎭 Proposta do RP que Será Seguido na Cidade</h2>
+      <div class="card" onclick="toggleCard(this)">
+        Clique para abrir
+        <div class="card-content">
+          A Real7 segue uma linha de RP mais estratégica e realista. Nosso estilo será: Organização mais fria e calculista Ações com contexto (nada aleatório) Conflitos com desenvolvimento (história antes da guerra) Interação constante com outras facções Respeito total ao RP da polícia A gente valoriza muito o RP antes da ação. Se for pra ter conflito, vai ter motivo, construção e consequência. Também vamos investir bastante na questão das lives, trazendo: Acompanhamento das histórias Interação com o público Visibilidade pro servidor.
+        </div>
+      </div>
+    </section>
+
+    <section id="stream" class="tab">
+      <h2>🎥 TIME DE STREAMERS REAL7</h2>
+      <div class="card" onclick="toggleCard(this)">
+        Clique para abrir
+        <div class="card-content">
+          A grande maioria dos membros da Real7 estará envolvida em streams ao vivo, trazendo visibilidade tanto para a facção quanto para o servidor.
+
+Nosso objetivo é:
+
+Criar conteúdo consistente e de qualidade
+Mostrar o RP de forma imersiva para o público
+Fortalecer a comunidade através das lives
+
+Além disso, gostaríamos de integrar oficialmente o time de streamers do servidor, contribuindo diretamente para o crescimento e divulgação do mesmo.
+
+A Real7 não será apenas uma facção dentro do jogo, será também uma presença forte fora dele.
+        </div>
+      </div>
+    </section>
+
+    <section id="uniforme" class="tab">
+      <h2>👕 Uniformes</h2>
+      <div class="card" onclick="toggleCard(this)">
+        Clique para abrir
+        <div class="card-content">
+          A identidade visual da Real7 será simples, mas marcante. A ideia é trabalhar com: Cores mais escuras (preto, cinza, branco) Detalhes com o número 7, que representa a família Visual mais “limpo” e organizado (sem exagero) O objetivo é que, ao ver o uniforme, já saibam que é a Real7, sem precisar de muito. Também pretendemos manter um padrão, evitando bagunça visual entre os membros..
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- JS -->
+<script src="script.js"></script>
+
+</body>
+</html>
