@@ -1,0 +1,67 @@
+{
+  "name": "elite-boots",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --hostname 0.0.0.0",
+    "build": "npm run db:generate && next build",
+    "start": "next start --hostname 0.0.0.0",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "db:migrate": "tsx scripts/migrate.ts",
+    "db:seed": "tsx prisma/seed.ts",
+    "db:generate": "tsx scripts/generate.ts",
+    "admin:create": "tsx scripts/create-admin.ts",
+    "worker:mail": "tsx scripts/mail-worker.ts",
+    "payments:reconcile": "tsx scripts/reconcile.ts",
+    "format": "prettier --write src scripts tests *.ts *.mjs *.json docs README.md .github/workflows",
+    "format:check": "prettier --check src scripts tests *.ts *.mjs *.json docs README.md .github/workflows",
+    "setup:cloud": "tsx scripts/cloud-local.ts",
+    "admin:recover-mfa": "tsx scripts/recover-mfa.ts",
+    "maintenance": "tsx scripts/maintenance.ts"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.1159.0",
+    "@prisma/adapter-pg": "^7.10.1",
+    "@prisma/client": "^7.10.1",
+    "@smithy/node-http-handler": "^4.13.0",
+    "bcryptjs": "^3.0.0",
+    "dotenv": "^18.0.9",
+    "exceljs": "^4.4.0",
+    "https-proxy-agent": "^9.1.0",
+    "lucide-react": "^0.468.0",
+    "next": "16.4.3",
+    "nodemailer": "^10.3.1",
+    "otpauth": "^9.4.0",
+    "pg": "^8.23.1",
+    "qrcode": "^1.5.4",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "undici": "^8.12.3",
+    "zod": "^4.0.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.56.0",
+    "@prisma/client-generator-js": "^7.10.1",
+    "@prisma/internals": "^7.10.1",
+    "@tailwindcss/postcss": "^4.1.0",
+    "@types/node": "^24.0.0",
+    "@types/nodemailer": "^7.0.0",
+    "@types/pg": "^8.23.1",
+    "@types/qrcode": "^1.5.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "prettier": "^3.9.10",
+    "prisma": "^7.10.1",
+    "tailwindcss": "^4.1.0",
+    "tsx": "^4.20.0",
+    "typescript": "^5.9.0",
+    "vitest": "^3.2.0"
+  },
+  "overrides": {
+    "exceljs": {
+      "uuid": "^11.1.1"
+    }
+  }
+}

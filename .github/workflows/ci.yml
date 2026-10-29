@@ -1,0 +1,41 @@
+name: Quality
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: elite
+          POSTGRES_PASSWORD: ci-only-password
+          POSTGRES_DB: elite_test
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U elite -d elite_test"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      DATABASE_URL: postgresql://elite:ci-only-password@localhost:5432/elite_test
+      APP_URL: http://localhost:3000
+      DEMO_MODE: "true"
+      MFA_ENCRYPTION_KEY: "abababababababababababababababababababababababababababababababab"
+      NEXT_TELEMETRY_DISABLED: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+      - run: npm ci
+      - run: npm run db:generate && npm run db:migrate && npm run db:seed
+      - run: npm run typecheck && npm test
+      - run: npm audit --omit=dev --audit-level=high
+      - run: npx playwright install --with-deps chromium
+      - run: npm run dev > /tmp/elite-next.log 2>&1 &
+      - run: node scripts/wait-http.mjs && CHROMIUM_PATH=$(node -e "console.log(require('@playwright/test').chromium.executablePath())") npm run test:e2e
+      - run: npm run build
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: failure-evidence
+          path: test-results/

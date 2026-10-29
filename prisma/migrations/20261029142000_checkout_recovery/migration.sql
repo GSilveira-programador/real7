@@ -1,0 +1,2 @@
+ALTER TABLE "Order" ADD COLUMN "clientHash" TEXT NOT NULL DEFAULT '', ADD COLUMN "requestHash" TEXT NOT NULL DEFAULT '', ADD COLUMN "accessCipher" TEXT;
+ALTER TABLE "Payment" ADD COLUMN "creationState" TEXT NOT NULL DEFAULT 'new';
