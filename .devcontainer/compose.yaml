@@ -1,0 +1,25 @@
+services:
+  app:
+    image: node:24-bookworm
+    command: sleep infinity
+    working_dir: /workspace/real7
+    volumes:
+      - ..:/workspace/real7:cached
+    depends_on:
+      db:
+        condition: service_healthy
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: demo
+      POSTGRES_PASSWORD: codespaces-demo-only
+      POSTGRES_DB: jn_preview
+    volumes:
+      - preview-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U demo -d jn_preview"]
+      interval: 3s
+      timeout: 3s
+      retries: 30
+volumes:
+  preview-data:

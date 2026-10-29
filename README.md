@@ -4,6 +4,10 @@
 
 E-commerce de chuteiras com Next.js 16, React 19, TypeScript, Tailwind 4, PostgreSQL 17 e Prisma 7. Interface em português, responsiva, tema claro/escuro, ilustrações SVG originais e seis produtos **inteiramente fictícios**. O código substitui o site Real7; uma cópia do site original foi preservada fora do checkout em `/workspace/backups/real7-original.tar.gz` nesta máquina e o histórico Git original foi mantido.
 
+## Abrir a aplicação pelo navegador
+
+[**Abrir JN Chuteiras no GitHub Codespaces**](https://codespaces.new/GSilveira-programador/real7?ref=main). Crie o ambiente, aguarde a instalação e abra a porta **3000** na aba **Ports**. Inclui servidor e banco demonstrativo. Veja [o passo a passo](docs/CODESPACES.md).
+
 ## Aparência da loja
 
 [Prévia visual no GitHub Pages](https://gsilveira-programador.github.io/real7/) — requer Pages ativado na branch `gh-pages`, pasta `/ (root)`. É uma captura rolável, sem compras ou botões interativos.

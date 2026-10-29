@@ -1,0 +1,17 @@
+{
+  "name": "JN Chuteiras — loja de demonstração",
+  "dockerComposeFile": "compose.yaml",
+  "service": "app",
+  "workspaceFolder": "/workspace/real7",
+  "forwardPorts": [3000],
+  "portsAttributes": {
+    "3000": {
+      "label": "JN Chuteiras",
+      "onAutoForward": "openBrowser",
+      "protocol": "http"
+    }
+  },
+  "postCreateCommand": "npm ci && node scripts/codespaces-setup.mjs && npm run db:generate && npm run db:migrate && npm run db:seed",
+  "postStartCommand": "bash .devcontainer/start.sh",
+  "waitFor": "postCreateCommand"
+}
