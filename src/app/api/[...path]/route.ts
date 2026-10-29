@@ -359,7 +359,7 @@ async function handler(
       });
       return NextResponse.json({
         secret,
-        uri: `otpauth://totp/EliteBoots:${encodeURIComponent(u.email)}?secret=${secret}&issuer=EliteBoots`,
+        uri: `otpauth://totp/JNChuteiras:${encodeURIComponent(u.email)}?secret=${secret}&issuer=JNChuteiras`,
       });
     }
     if (route === "auth/mfa/enable" && method === "POST") {
@@ -581,8 +581,11 @@ async function handler(
             recipient: u.email,
             subject: {
               in: [
+                "Confirme sua inscrição — JN Chuteiras",
                 "Confirme sua inscrição — Elite Boots",
+                "Bem-vindo ao time JN Chuteiras",
                 "Bem-vindo ao time Elite Boots",
+                "Preferências de e-mail — JN Chuteiras",
                 "Preferências de e-mail — Elite Boots",
                 "Confirme seu cadastro",
                 "Recuperar senha",

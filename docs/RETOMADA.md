@@ -1,4 +1,4 @@
-# Retomada — Elite Boots
+# Retomada — JN Chuteiras
 
 O projeto está salvo em `/workspace/real7`, substituindo o site estático anterior. O envio do código ao GitHub foi autorizado pelo usuário. Confira o commit e a branch em `git status`, `git log` e no remoto antes de retomar; o envio não publica a loja em um domínio.
 

@@ -97,7 +97,7 @@ export default function Admin({
     <div className="container page">
       <div className="section-heading">
         <div>
-          <span className="eyebrow">ELITE BOOTS / BACK OFFICE</span>
+          <span className="eyebrow">JN CHUTEIRAS / BACK OFFICE</span>
           <h1>Controle do jogo.</h1>
         </div>
         <span className="status">

@@ -1,6 +1,14 @@
-# Elite Boots
+# JN Chuteiras
+
+> **Esta página é a documentação do projeto, não a loja em execução.** O código da aplicação está em [`src/`](src). Para abrir a vitrine, é necessário executar a aplicação com PostgreSQL ou publicá-la em uma hospedagem compatível com Next.js. GitHub Pages não executa este backend.
 
 E-commerce de chuteiras com Next.js 16, React 19, TypeScript, Tailwind 4, PostgreSQL 17 e Prisma 7. Interface em português, responsiva, tema claro/escuro, ilustrações SVG originais e seis produtos **inteiramente fictícios**. O código substitui o site Real7; uma cópia do site original foi preservada fora do checkout em `/workspace/backups/real7-original.tar.gz` nesta máquina e o histórico Git original foi mantido.
+
+## Aparência da loja
+
+Captura da aplicação executada localmente, com catálogo fictício e vendas desativadas. Esta imagem não é um link de acesso à loja.
+
+![Vitrine JN Chuteiras em ambiente demonstrativo](docs/images/vitrine-desktop.png)
 
 ## Estado e limites
 

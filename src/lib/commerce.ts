@@ -99,7 +99,7 @@ export async function shipping(postcode: string, raw: unknown, code?: string) {
       Authorization: `Bearer ${process.env.SHIPPING_TOKEN}`,
       "Content-Type": "application/json",
       Accept: "application/json",
-      "User-Agent": "EliteBoots ecommerce",
+      "User-Agent": "JNChuteiras ecommerce",
     },
     body: JSON.stringify({
       from: { postal_code: process.env.SHIPPING_ORIGIN_POSTCODE },

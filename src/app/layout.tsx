@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 export const metadata: Metadata = {
   title: {
-    default: "Elite Boots | Seu jogo. Outro nível.",
-    template: "%s | Elite Boots",
+    default: "JN Chuteiras | Seu jogo. Outro nível.",
+    template: "%s | JN Chuteiras",
   },
   description:
     "Loja de chuteiras de campo, society e futsal. Ambiente demonstrativo com produtos fictícios.",

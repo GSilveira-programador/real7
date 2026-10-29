@@ -56,7 +56,7 @@ export async function generateMetadata({
             admin: "Administração",
             checkout: "Finalizar compra",
           } as Record<string, string>
-        )[slug[0]] || "Elite Boots"
+        )[slug[0]] || "JN Chuteiras"
       : "Seu jogo. Outro nível.",
   };
 }

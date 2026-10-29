@@ -90,7 +90,7 @@ export async function changeUserRole(
       await tx.mail.create({
         data: {
           recipient: target.email,
-          subject: "Permissões da conta atualizadas — Elite Boots",
+          subject: "Permissões da conta atualizadas — JN Chuteiras",
           body: "O perfil de acesso da sua conta foi alterado pela administração. Todas as sessões foram encerradas. Entre novamente. O acesso administrativo exige configurar e validar MFA. Se você não reconhece essa alteração, entre em contato com a loja.",
         },
       });
@@ -137,7 +137,7 @@ export async function recoverMfa(input: unknown) {
     await tx.mail.create({
       data: {
         recipient: target.email,
-        subject: "MFA reiniciado pela operação — Elite Boots",
+        subject: "MFA reiniciado pela operação — JN Chuteiras",
         body: "A operação autorizada reiniciou o MFA da sua conta. As sessões anteriores foram revogadas. Sua senha continua necessária para entrar; cadastre um novo autenticador em Minha conta antes de acessar a administração. Se você não solicitou essa recuperação, procure o responsável pela loja imediatamente.",
       },
     });

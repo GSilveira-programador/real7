@@ -33,7 +33,7 @@ export default function NewsletterPreferences() {
           {unsubscribe
             ? "Você pode deixar de receber novidades sem entrar em uma conta. Confirme abaixo para aplicar o descadastro."
             : confirm
-              ? "Confirme que este endereço é seu e que deseja receber novidades da Elite Boots. Nenhum envio promocional será ativado apenas por preencher o formulário da loja."
+              ? "Confirme que este endereço é seu e que deseja receber novidades da JN Chuteiras. Nenhum envio promocional será ativado apenas por preencher o formulário da loja."
               : "Solicite um link privado para gerenciar sua inscrição. Você poderá cancelar sem entrar em uma conta."}
         </p>
         {message ? (

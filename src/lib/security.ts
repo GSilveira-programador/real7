@@ -49,7 +49,7 @@ export async function requireUser(roles?: Role[]) {
 export function totp(secret: string, code: string) {
   return (
     new TOTP({
-      issuer: "Elite Boots",
+      issuer: "JN Chuteiras",
       algorithm: "SHA1",
       digits: 6,
       period: 30,

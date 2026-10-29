@@ -136,7 +136,7 @@ export async function createCheckout(raw: unknown) {
         await tx.mail.create({
           data: {
             recipient: d.email,
-            subject: "Pedido recebido — Elite Boots",
+            subject: "Pedido recebido — JN Chuteiras",
             body: `Pedido pendente. Acompanhe com segurança: ${process.env.APP_URL}/pedido/${created.id}?access=${access}. Este link é privado.`,
           },
         });
@@ -170,7 +170,7 @@ export async function createCheckout(raw: unknown) {
         items: [
           {
             id: order.id,
-            title: `Elite Boots — ${order.id}`,
+            title: `JN Chuteiras — ${order.id}`,
             quantity: 1,
             currency_id: "BRL",
             unit_price: order.total / 100,

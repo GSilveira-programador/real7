@@ -32,7 +32,7 @@ async function links(email: string) {
   const mail = await db.mail.findFirstOrThrow({
     where: {
       recipient: email,
-      subject: "Confirme sua inscrição — Elite Boots",
+      subject: "Confirme sua inscrição — JN Chuteiras",
     },
     orderBy: { createdAt: "desc" },
   });
@@ -68,14 +68,14 @@ it("confirma uma única vez, cria boas-vindas e não revela cadastro pela respos
   expect(again).toEqual(first);
   expect(
     await db.mail.count({
-      where: { recipient: email, subject: "Bem-vindo ao time Elite Boots" },
+      where: { recipient: email, subject: "Bem-vindo ao time JN Chuteiras" },
     }),
   ).toBe(1);
   expect(
     await db.mail.count({
       where: {
         recipient: email,
-        subject: "Confirme sua inscrição — Elite Boots",
+        subject: "Confirme sua inscrição — JN Chuteiras",
       },
     }),
   ).toBe(1);
@@ -136,7 +136,7 @@ it("envia preferências só ao endereço inscrito e mantém resposta genérica",
   const mail = await db.mail.findFirstOrThrow({
     where: {
       recipient: email,
-      subject: "Preferências de e-mail — Elite Boots",
+      subject: "Preferências de e-mail — JN Chuteiras",
     },
   });
   expect(mail.body).toContain("?unsubscribe=" + tokens.unsubscribe);

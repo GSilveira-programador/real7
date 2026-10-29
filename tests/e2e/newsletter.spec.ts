@@ -22,7 +22,7 @@ test("newsletter exige confirmação e oferece descadastro sem login", async ({
     const invitation = await db.mail.findFirstOrThrow({
       where: {
         recipient: email,
-        subject: "Confirme sua inscrição — Elite Boots",
+        subject: "Confirme sua inscrição — JN Chuteiras",
       },
     });
     const token = invitation.body.match(/\?confirm=([a-f0-9]{64})/)![1];
@@ -58,7 +58,7 @@ test("newsletter exige confirmação e oferece descadastro sem login", async ({
     const preferences = await db.mail.findFirstOrThrow({
       where: {
         recipient: email,
-        subject: "Preferências de e-mail — Elite Boots",
+        subject: "Preferências de e-mail — JN Chuteiras",
       },
     });
     const exit = preferences.body.match(/\?unsubscribe=([a-f0-9]{64})/)![1];

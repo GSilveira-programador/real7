@@ -36,8 +36,8 @@ export async function subscribe(input: unknown) {
     await tx.mail.create({
       data: {
         recipient: d.email,
-        subject: "Confirme sua inscrição — Elite Boots",
-        body: `Você solicitou receber novidades da Elite Boots. Confirme em até 24 horas: ${base}/newsletter?confirm=${confirm}\n\nNão foi você ou mudou de ideia? Cancele a inscrição: ${base}/newsletter?unsubscribe=${unsubscribe}\n\nA inscrição só será ativada após a confirmação. Política de privacidade: ${base}/legal/privacidade`,
+        subject: "Confirme sua inscrição — JN Chuteiras",
+        body: `Você solicitou receber novidades da JN Chuteiras. Confirme em até 24 horas: ${base}/newsletter?confirm=${confirm}\n\nNão foi você ou mudou de ideia? Cancele a inscrição: ${base}/newsletter?unsubscribe=${unsubscribe}\n\nA inscrição só será ativada após a confirmação. Política de privacidade: ${base}/legal/privacidade`,
       },
     });
     await tx.auditLog.create({
@@ -91,7 +91,7 @@ export async function confirmSubscription(input: unknown) {
     await tx.mail.create({
       data: {
         recipient: subscriber.email,
-        subject: "Bem-vindo ao time Elite Boots",
+        subject: "Bem-vindo ao time JN Chuteiras",
         body: `Sua inscrição foi confirmada. Você pode cancelar a qualquer momento: ${base}/newsletter?unsubscribe=${unsubscribe}\n\nNão haverá envio promocional enquanto as campanhas de e-mail não estiverem configuradas.`,
       },
     });
@@ -105,7 +105,7 @@ export async function confirmSubscription(input: unknown) {
     });
   });
   return {
-    message: "Inscrição confirmada. Você faz parte do time Elite Boots!",
+    message: "Inscrição confirmada. Você faz parte do time JN Chuteiras!",
   };
 }
 export async function unsubscribe(input: unknown) {
@@ -133,8 +133,11 @@ export async function unsubscribe(input: unknown) {
           sentAt: null,
           subject: {
             in: [
+              "Confirme sua inscrição — JN Chuteiras",
               "Confirme sua inscrição — Elite Boots",
+              "Bem-vindo ao time JN Chuteiras",
               "Bem-vindo ao time Elite Boots",
+              "Preferências de e-mail — JN Chuteiras",
               "Preferências de e-mail — Elite Boots",
             ],
           },
@@ -168,7 +171,7 @@ export async function requestSubscriptionPreferences(input: unknown) {
     await db.mail.create({
       data: {
         recipient: d.email,
-        subject: "Preferências de e-mail — Elite Boots",
+        subject: "Preferências de e-mail — JN Chuteiras",
         body: `Você solicitou gerenciar sua inscrição. Para cancelar, use este link privado: ${base}/newsletter?unsubscribe=${raw}\n\nNão é necessário entrar em uma conta. Se não fez esta solicitação, ignore a mensagem.`,
       },
     });

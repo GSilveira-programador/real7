@@ -336,13 +336,13 @@ export default function Store({
       </div>
       <header className="header">
         <div className="container header-inner">
-          <Link href="/" className="logo" aria-label="Elite Boots início">
+          <Link href="/" className="logo" aria-label="JN Chuteiras início">
             <span className="logo-mark">
-              E<span>∕</span>
+              J<span>N</span>
             </span>
             <span>
-              ELITE<span className="logo-light">BOOTS</span>
-              <small>BUILT FOR YOUR GAME</small>
+              JN<span className="logo-light">CHUTEIRAS</span>
+              <small>SEU JOGO. OUTRO NÍVEL.</small>
             </span>
             <i>↗</i>
           </Link>
@@ -461,7 +461,7 @@ export default function Store({
         <div className="container footer-grid">
           <div>
             <Link href="/" className="footer-logo">
-              ELITE<span>BOOTS</span>↗
+              JN<span>CHUTEIRAS</span>↗
             </Link>
             <p>
               O próximo nível do seu jogo
@@ -480,7 +480,7 @@ export default function Store({
           <div>
             <h3>Conte com a gente</h3>
             <Link href="/conta">Minha conta e pedidos</Link>
-            <Link href="/contato">Fale com a Elite</Link>
+            <Link href="/contato">Fale com a JN Chuteiras</Link>
             <Link href="/legal/entrega">Entregas e fretes</Link>
             <Link href="/legal/trocas">Trocas e devoluções</Link>
           </div>
@@ -497,7 +497,7 @@ export default function Store({
         </div>
         <div className="container footer-bottom">
           <span>
-            © {new Date().getFullYear()} Elite Boots.{" "}
+            © {new Date().getFullYear()} JN Chuteiras.{" "}
             {config.company || "Empresa ainda não configurada."}
           </span>
           <span>PROJETO DEMONSTRATIVO · PRODUTOS FICTÍCIOS</span>
@@ -590,7 +590,7 @@ function ProductCard({
       </div>
       <div className="product-info">
         <div className="product-eyebrow">
-          ELITE LAB <span>ILUSTRATIVO</span>
+          JN LAB <span>ILUSTRATIVO</span>
         </div>
         <Link href={"/produto/" + p.slug}>
           <h3>{p.name}</h3>
@@ -682,7 +682,7 @@ function Home({
           <div className="hero-art">
             <div className="orbit orbit-one" />
             <div className="orbit orbit-two" />
-            <div className="hero-word">{banner ? "ELITE" : "VELOCITY"}</div>
+            <div className="hero-word">{banner ? "JN" : "VELOCITY"}</div>
             <span className="art-plus plus-one">+</span>
             <span className="art-plus plus-two">+</span>
             <img
@@ -695,7 +695,7 @@ function Home({
             />
             <div className="shoe-caption">
               <span>
-                {banner ? "SELEÇÃO ELITE BOOTS" : "01 / ELITE LAB CONCEPT"}
+                {banner ? "SELEÇÃO JN CHUTEIRAS" : "01 / JN LAB CONCEPT"}
               </span>
               <b>
                 {banner ? "ESCOLHAS DO SEU JOGO" : "VELOCITY PRO"}{" "}
@@ -2144,7 +2144,7 @@ function Account({
           <img src="/images/boot-0.svg" alt="Ilustração de chuteira" />
         </div>
         <form className="panel auth-form" onSubmit={action}>
-          <span className="eyebrow">ELITE BOOTS CLUB</span>
+          <span className="eyebrow">JN CHUTEIRAS CLUB</span>
           <h2>
             {params.has("reset")
               ? "Nova senha"
@@ -2702,7 +2702,7 @@ function Contact({
       </div>
       <div className="account-grid">
         <section className="panel">
-          <h2>Fale com a Elite</h2>
+          <h2>Fale com a JN Chuteiras</h2>
           <p>{config.hours}</p>
           {config.email ? (
             <a href={"mailto:" + config.email}>{config.email}</a>
