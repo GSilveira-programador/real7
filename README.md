@@ -6,6 +6,8 @@ E-commerce de chuteiras com Next.js 16, React 19, TypeScript, Tailwind 4, Postgr
 
 ## Aparência da loja
 
+[Prévia visual no GitHub Pages](https://gsilveira-programador.github.io/real7/) — requer Pages ativado na branch `gh-pages`, pasta `/ (root)`. É uma captura rolável, sem compras ou botões interativos.
+
 Captura da aplicação executada localmente, com catálogo fictício e vendas desativadas. Esta imagem não é um link de acesso à loja.
 
 ![Vitrine JN Chuteiras em ambiente demonstrativo](docs/images/vitrine-desktop.png)
