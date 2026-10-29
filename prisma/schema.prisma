@@ -195,6 +195,7 @@ model OrderItem {
   price Int
 }
 model Payment {
+  providerUpdatedAt DateTime?
   id String @id @default(cuid())
   orderId String @unique
   order Order @relation(fields: [orderId], references: [id])

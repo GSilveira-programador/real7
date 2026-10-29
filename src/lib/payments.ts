@@ -63,17 +63,115 @@ export async function syncPayment(id: string) {
     Math.round(Number(p.transaction_amount) * 100) !== o.total
   )
     throw new HttpError(409, "Valor ou moeda divergente.");
+  const updatedAt = new Date(p.date_last_updated);
+  const knownStatuses = [
+    "pending",
+    "in_process",
+    "authorized",
+    "in_mediation",
+    "approved",
+    "rejected",
+    "cancelled",
+    "refunded",
+    "charged_back",
+  ];
+  if (
+    !p.id ||
+    !knownStatuses.includes(p.status) ||
+    !Number.isFinite(updatedAt.getTime())
+  )
+    throw new HttpError(502, "Resposta de pagamento inválida.");
   await db.$transaction(async (tx) => {
+    // Serialize webhook/reconciliation per order; stock release also updates this row.
+    await tx.$queryRaw`SELECT id FROM "Order" WHERE id = ${o.id} FOR UPDATE`;
+    const current = await tx.order.findUniqueOrThrow({
+      where: { id: o.id },
+      include: { payment: true },
+    });
+    const payment = current.payment!;
     const eventKey = `mp:${p.id}:${p.status}:${p.date_last_updated}`;
     if (await tx.paymentTransaction.findUnique({ where: { eventKey } })) return;
     await tx.paymentTransaction.create({
       data: { paymentId: o.payment!.id, eventKey, status: p.status },
     });
+    const stale =
+      payment.providerUpdatedAt && updatedAt < payment.providerUpdatedAt;
+    const terminal = ["refunded", "charged_back"].includes(payment.status);
+    const downgrade =
+      (terminal && p.status !== payment.status) ||
+      (payment.status === "approved" &&
+        !["approved", "refunded", "charged_back", "in_mediation"].includes(
+          p.status,
+        ));
+    const differentPayment =
+      payment.providerId &&
+      payment.providerId !== String(p.id) &&
+      ["approved", "refunded", "charged_back", "in_mediation"].includes(
+        payment.status,
+      );
+    if (stale || downgrade || differentPayment) {
+      await tx.auditLog.create({
+        data: {
+          actorId: "SYSTEM:payment",
+          action: "payment.event_review",
+          entityId: o.id,
+          details: {
+            eventKey,
+            reason: differentPayment
+              ? "different_payment"
+              : stale
+                ? "out_of_order"
+                : "status_regression",
+          },
+        },
+      });
+      return;
+    }
     await tx.payment.update({
       where: { id: o.payment!.id },
-      data: { providerId: String(p.id), status: p.status },
+      data: {
+        providerId: String(p.id),
+        status: p.status,
+        providerUpdatedAt: updatedAt,
+      },
     });
-    if (p.status === "approved") {
+    if (
+      p.status === "approved" &&
+      current.stockReleased &&
+      current.status === "REFUNDING"
+    )
+      return;
+    if (
+      p.status === "approved" &&
+      (current.stockReleased || current.status === "CANCELLED")
+    ) {
+      await tx.order.update({
+        where: { id: o.id },
+        data: { status: "REFUNDING" },
+      });
+      await tx.orderEvent.create({
+        data: {
+          orderId: o.id,
+          status: "REFUNDING",
+          note: "Pagamento recebido após cancelamento/liberação de estoque. Análise operacional necessária; nenhum reembolso foi executado.",
+        },
+      });
+      await tx.auditLog.create({
+        data: {
+          actorId: "SYSTEM:payment",
+          action: "payment.late_approval",
+          entityId: o.id,
+          details: { eventKey },
+        },
+      });
+      await tx.mail.create({
+        data: {
+          recipient: o.email,
+          subject: "Pagamento em análise — JN Chuteiras",
+          body: `Recebemos um pagamento para o pedido ${o.id} após o cancelamento. Nossa equipe precisa analisar a situação antes de confirmar entrega ou reembolso.`,
+        },
+      });
+    } else if (p.status === "approved") {
       const changed = await tx.order.updateMany({
         where: { id: o.id, status: "PENDING", stockReleased: false },
         data: { status: "PAID" },

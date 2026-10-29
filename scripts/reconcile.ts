@@ -1,7 +1,6 @@
 import "dotenv/config";
 import { db } from "../src/lib/db";
-import { mp, syncPayment } from "../src/lib/payments";
-import { releaseOrder } from "../src/lib/commerce";
+import { reconcileOrderPayments } from "../src/lib/reconciliation";
 async function main() {
   const orders = await db.order.findMany({
     where: { status: "PENDING" },
@@ -9,10 +8,7 @@ async function main() {
   });
   for (const o of orders) {
     try {
-      const result = await mp(
-        "/v1/payments/search?external_reference=" + encodeURIComponent(o.id),
-      );
-      for (const p of result.results || []) await syncPayment(String(p.id));
+      await reconcileOrderPayments(o.id);
       const fresh = await db.order.findUniqueOrThrow({ where: { id: o.id } });
       // Never release a live payment reservation. Expired preferences must be checked by an operator.
       if (fresh.status === "PENDING" && fresh.expiresAt < new Date())
@@ -27,4 +23,9 @@ async function main() {
     }
   }
 }
-main().finally(() => db.$disconnect());
+main()
+  .catch(() => {
+    console.error("reconciliation_batch_failed");
+    process.exitCode = 1;
+  })
+  .finally(() => db.$disconnect());

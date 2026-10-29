@@ -46,3 +46,13 @@ Analytics e WhatsApp Business API são opcionais e não estão ativados. Não ex
 ## Rede da nuvem
 
 Foram solicitadas no rascunho as permissões `binaries.prisma.sh`, `api.mercadopago.com`, `sandbox.melhorenvio.com.br` e `melhorenvio.com.br`. A gravação do rascunho não aplica nem publica permissões. O caminho JavaScript do Prisma funciona sem o domínio de binários; ele permanece útil para ferramentas oficiais opcionais. Acrescente os destinos reais de SMTP/S3 ao configurar esses serviços. TCP SMTP e PostgreSQL remoto podem exigir concessões de rede apropriadas além da lista HTTP. Nunca desative TLS ou checksums.
+
+## Ordem e concorrência de notificações financeiras
+
+A oitava migration adiciona `Payment.providerUpdatedAt`. Webhook e conciliação consultam o pagamento no backend e serializam a gravação por lock do pedido. Eventos idênticos são deduplicados dentro dessa trava, inclusive quando chegam simultaneamente. Data/status inválidos são recusados; eventos antigos, regressões de estado e pagamentos diferentes de uma transação já confirmada são registrados para revisão, sem sobrescrever a situação financeira consolidada.
+
+Aprovação recebida depois de cancelamento/liberação de estoque encaminha o pedido a `REFUNDING` (análise de devolução/reembolso), registra auditoria `payment.late_approval` e avisa o cliente. **Isso não executa um reembolso, não promete entrega e não reserva estoque novamente.** Atualizações repetidas não duplicam esse aviso. O operador deve consultar o provedor e tratar a situação; a aplicação não resolve automaticamente pagamentos duplicados.
+
+`npm run payments:reconcile` pagina a busca do Mercado Pago em lotes de 50, com teto de 1000 resultados por pedido. Resultado parcial, referência divergente, resposta inválida ou excesso de páginas gera falha explícita. Falta de resultados não é prova de que uma preferência expirou ou deixou de aceitar pagamentos; nenhuma reserva é liberada por uma busca vazia. O comando ainda percorre os pedidos pendentes e exige agendamento/monitoramento na hospedagem. Cancelamento automático de preferências e resolução de criação incerta continuam pendentes.
+
+Os testes locais de concorrência, ordem de eventos, aprovação tardia e paginação usam respostas isoladas do provedor. Não houve transação real nem homologação externa nesta etapa.
