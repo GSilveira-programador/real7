@@ -5,7 +5,7 @@ O projeto está salvo em `/workspace/real7`, substituindo o site estático anter
 ## Estado validado
 
 - Next.js, React, TypeScript, PostgreSQL e Prisma funcionando localmente.
-- 73 testes unitários/integração e 36 testes desktop/celular aprovados.
+- 81 testes unitários/integração e 38 testes desktop/celular aprovados.
 - Build de produção e smoke test aprovados; auditoria de dependências de produção sem vulnerabilidades reportadas na última execução.
 - Backup PostgreSQL restaurado com 6 produtos, 54 variações e 7 migrations.
 - Nova etapa: banners e campanhas agendados, edição completa de atributos/galeria, variações arquiváveis, relatórios por período e recuperação de carrinho indisponível.
@@ -35,3 +35,5 @@ Etapa financeira: oitava migration adiciona data de atualização do provedor. W
 Nova etapa: devoluções com lock por pedido, decisões versionadas, observação visível ao cliente, envio exclusivo de reembolso integral e consulta de tentativas incertas. Nona/décima migrations aplicadas localmente; detalhes em RETURNS.md. O servidor do Codespaces do usuário precisa atualizar código/cliente/migrations antes de refletir essa etapa.
 
 Gestão de pedidos: busca/paginação no histórico completo, detalhe sob demanda, filtros em dias de Brasília, projeção sem segredos e auditoria logística transacional. Décima primeira migration de índices aplicada localmente. Ver ORDER_MANAGEMENT.md.
+
+Configuração comercial: versão contra sobrescritas, auditoria transacional, validação de CNPJ numérico/alfanumérico e redes sociais, exibição de perfis/CNPJ e preparação para ativação. Décima segunda migration aplicada localmente. Reiniciar servidor após gerar o cliente/migrar; STORE_SETTINGS.md explica limites da lista, que não é homologação.

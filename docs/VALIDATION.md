@@ -5,8 +5,8 @@ Validação executada nesta máquina em 29/10/2026. Não representa homologaçã
 | Verificação                           | Resultado                                                               |
 | ------------------------------------- | ----------------------------------------------------------------------- |
 | TypeScript                            | `npm run typecheck` passou                                              |
-| Regras e integração PostgreSQL        | 73 testes passaram em 12 arquivos                                       |
-| Playwright desktop e celular          | 36 testes passaram                                                      |
+| Regras e integração PostgreSQL        | 81 testes passaram em 13 arquivos                                       |
+| Playwright desktop e celular          | 38 testes passaram                                                      |
 | Build de produção                     | `npm run build` passou                                                  |
 | Smoke do build compilado              | Home, catálogo e produto carregaram no Chromium, sem `pageerror`        |
 | Cabeçalhos de produção                | CSP, HSTS, nosniff e proteção de framing presentes no upstream local    |
@@ -34,3 +34,5 @@ Etapa financeira: testes de dez webhooks simultâneos, eventos atrasados, regres
 Etapa de devoluções: nove testes de integração verificam concorrência de solicitações/operadores, transições, versão obsoleta, decisão registrada, reembolso integral, estoque preservado, timeout, consulta idempotente e divergências do provedor. O fluxo do navegador testa solicitação visitante, decisão/observação na área administrativa e visualização pelo cliente em desktop/celular; nenhuma requisição financeira real é feita. Os testes antigos de cupom e edição administrativa foram corrigidos para distinguir múltiplos status acessíveis e dispensar o consentimento antes de interagir com conteúdo coberto.
 
 Gestão de pedidos: sete testes adicionais cobrem paginação de 201 pedidos empatados por data, recuperação do pedido antigo, filtros de situação/rastreio/e-mail, limites de datas em Brasília, erros e projeção de campos privados. Navegador testa atendente autenticado, acesso anônimo bloqueado, paginação, detalhe e atualização logística auditada.
+
+Configuração comercial: oito testes adicionais cobrem CNPJ numérico/alfanumérico, links maliciosos, normalização de telefone, centavos, projeção sem segredos, controle de versões concorrentes e bloqueio de ativação incompleta. O navegador valida edição de atendimento/perfil social, rejeição de versão antiga e exibição no contato, sem ativar vendas.

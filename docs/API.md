@@ -122,3 +122,5 @@ A emissão da sessão usa lock da conta e confere a senha criptografada, o estad
 Devoluções agora exigem `version` e `note` na decisão administrativa. Consulta de reembolso incerto: `POST /api/admin/returns/:id/reconcile`. Veja [RETURNS.md](RETURNS.md) para estados e limites financeiros.
 
 Gestão de pedidos: `GET /api/admin/orders` aceita `q`, `status`, `from`, `to`, `page`, `pageSize`; `GET /api/admin/orders/:id` retorna detalhes operacionais sem tokens. Consulte [ORDER_MANAGEMENT.md](ORDER_MANAGEMENT.md).
+
+Configurações: `PUT /api/admin/settings` exige `version`. Novos campos públicos: `instagram`, `facebook`, `youtube`, `nationwideShipping`, `legalReviewed`. `GET /api/admin/settings/readiness` retorna apenas indicadores de configuração; ambos exclusivos do administrador. Ver [STORE_SETTINGS.md](STORE_SETTINGS.md).

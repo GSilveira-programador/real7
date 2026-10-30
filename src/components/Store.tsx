@@ -327,7 +327,9 @@ export default function Store({
         </span>
         <span>
           {config.salesEnabled
-            ? "Consulte entrega para seu CEP"
+            ? config.nationwideShipping
+              ? "Entrega para todo o Brasil · Consulte seu CEP"
+              : "Consulte entrega para seu CEP"
             : "AMBIENTE DEMONSTRATIVO · VENDAS DESATIVADAS"}
         </span>
         <Link href="/ajuda">
@@ -500,7 +502,11 @@ export default function Store({
             © {new Date().getFullYear()} JN Chuteiras.{" "}
             {config.company || "Empresa ainda não configurada."}
           </span>
-          <span>PROJETO DEMONSTRATIVO · PRODUTOS FICTÍCIOS</span>
+          <span>
+            {config.cnpj
+              ? `CNPJ: ${config.cnpj}`
+              : "PROJETO DEMONSTRATIVO · PRODUTOS FICTÍCIOS"}
+          </span>
           <Link href="/admin">
             Administração <ArrowUpRight size={12} />
           </Link>
@@ -2746,6 +2752,19 @@ function Contact({
           ) : (
             <p>WhatsApp comercial ainda não informado.</p>
           )}
+          {[
+            ["instagram", "Instagram"],
+            ["facebook", "Facebook"],
+            ["youtube", "YouTube"],
+          ]
+            .filter(([key]) => config[key])
+            .map(([key, label]) => (
+              <p key={key}>
+                <a href={config[key]} target="_blank" rel="noopener noreferrer">
+                  {label} ↗
+                </a>
+              </p>
+            ))}
           <form
             onSubmit={async (e) => {
               e.preventDefault();

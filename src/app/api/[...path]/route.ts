@@ -1,3 +1,7 @@
+import {
+  saveStoreSettings,
+  configurationReadiness,
+} from "@/lib/store-settings";
 import { listOrders, orderDetail } from "@/lib/order-management";
 import {
   requestReturn,
@@ -926,47 +930,19 @@ async function handler(
         await audit(u.id, "review.moderate", path[2]);
         return NextResponse.json({ ok: true });
       }
+      if (route === "admin/settings/readiness" && get) {
+        if (u.role !== "ADMIN")
+          throw new HttpError(403, "Somente administrador.");
+        return NextResponse.json({
+          checks: configurationReadiness(await settings()),
+          notice:
+            "Configuração não é homologação: confirme pagamentos, fretes e e-mails nos serviços antes de lançar.",
+        });
+      }
       if (route === "admin/settings" && method === "PUT") {
         if (u.role !== "ADMIN")
           throw new HttpError(403, "Somente administrador.");
-        const d = z
-          .object({
-            company: z.string().max(150),
-            cnpj: z.string().max(18),
-            address: z.string().max(300),
-            email: z.union([z.email(), z.literal("")]),
-            whatsapp: z.string().regex(/^\d{10,13}$|^$/),
-            hours: z.string().max(150),
-            salesEnabled: z.boolean(),
-            freeShippingMinimum: z.number().int().min(0),
-            bannerTitle: z.string().min(3).max(100),
-            bannerSubtitle: z.string().max(200),
-          })
-          .parse(await body());
-        if (
-          d.salesEnabled &&
-          (!d.company ||
-            !d.cnpj ||
-            !d.address ||
-            !d.email ||
-            process.env.DEMO_MODE !== "false" ||
-            !process.env.MP_ACCESS_TOKEN ||
-            !process.env.MP_WEBHOOK_SECRET ||
-            !process.env.MP_COLLECTOR_ID ||
-            !process.env.SHIPPING_TOKEN ||
-            !process.env.SMTP_HOST)
-        )
-          throw new HttpError(
-            400,
-            "Complete dados comerciais e integrações antes de ativar vendas.",
-          );
-        await db.setting.upsert({
-          where: { key: "store" },
-          create: { key: "store", value: d },
-          update: { value: d },
-        });
-        await audit(u.id, "settings.update", "store");
-        return NextResponse.json(d);
+        return NextResponse.json(await saveStoreSettings(await body(), u.id));
       }
       if (
         path[1] === "returns" &&

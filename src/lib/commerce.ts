@@ -67,11 +67,14 @@ export async function quote(raw: unknown, code?: string) {
     coupon,
   };
 }
-export async function settings() {
-  return (
-    ((await db.setting.findUnique({ where: { key: "store" } }))
-      ?.value as Record<string, unknown>) || {}
-  );
+export async function settings(): Promise<
+  Record<string, unknown> & { version: number }
+> {
+  const setting = await db.setting.findUnique({ where: { key: "store" } });
+  return {
+    ...((setting?.value as Record<string, unknown>) || {}),
+    version: setting?.version ?? 0,
+  };
 }
 export async function shipping(postcode: string, raw: unknown, code?: string) {
   z.string()

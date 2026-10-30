@@ -1,4 +1,5 @@
 "use client";
+import StoreSettings from "./StoreSettings";
 import OrderManagement from "./OrderManagement";
 import ReturnManagement from "./ReturnManagement";
 import { useEffect, useState } from "react";
@@ -539,64 +540,7 @@ export default function Admin({
             </>
           )}
           {tab === "settings" && (
-            <section className="panel">
-              <h2>Operação comercial</h2>
-              <p className="notice">
-                Somente o administrador pode salvar estas configurações. A
-                ativação de vendas depende das credenciais externas.
-              </p>
-              <form
-                className="form-grid"
-                onSubmit={async (e) => {
-                  e.preventDefault();
-                  const f = Object.fromEntries(new FormData(e.currentTarget));
-                  await mutate(
-                    "admin/settings",
-                    {
-                      ...f,
-                      salesEnabled: f.salesEnabled === "on",
-                      freeShippingMinimum: Math.round(
-                        Number(f.freeShippingMinimum) * 100,
-                      ),
-                    },
-                    "PUT",
-                  );
-                }}
-              >
-                {[
-                  ["company", "Razão social"],
-                  ["cnpj", "CNPJ"],
-                  ["address", "Endereço da empresa"],
-                  ["email", "E-mail comercial"],
-                  ["whatsapp", "WhatsApp (DDI + DDD + número)"],
-                  ["hours", "Horário de atendimento"],
-                  ["bannerTitle", "Título do banner"],
-                  ["bannerSubtitle", "Texto do banner"],
-                ].map(([n, l]) => (
-                  <label key={n}>
-                    {l}
-                    <input name={n} defaultValue={data.settings[n] || ""} />
-                  </label>
-                ))}
-                <label>
-                  Frete grátis a partir de R$ (0 desativa)
-                  <input
-                    type="number"
-                    name="freeShippingMinimum"
-                    defaultValue={data.settings.freeShippingMinimum / 100}
-                  />
-                </label>
-                <label className="check-label">
-                  <input
-                    type="checkbox"
-                    name="salesEnabled"
-                    defaultChecked={data.settings.salesEnabled}
-                  />{" "}
-                  Habilitar vendas
-                </label>
-                <button className="btn">Salvar configurações</button>
-              </form>
-            </section>
+            <StoreSettings config={data.settings} save={mutate} />
           )}
         </div>
       </div>

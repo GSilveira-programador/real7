@@ -17,6 +17,7 @@
 - Integração de cotação Melhor Envio com dados de embalagem e regra de frete grátis. SMTP e imagens S3 configuráveis.
 - Contato persistido, newsletter com confirmação de e-mail, consentimento versionado, recuperação de link de preferências e descadastro sem login. Inscrições só são ativadas após confirmação e e-mails pendentes da newsletter são removidos ao cancelar. WhatsApp oculto sem número comercial e minutas legais claramente identificadas.
 - Exclusão de conta revoga tokens de recuperação, remove newsletter e bloqueia sessões de cadastros anonimizados, preservando pedidos por obrigação operacional/legal. Limites de tentativas são atômicos no PostgreSQL. A criação de sessão revalida os dados de acesso sob lock para não aceitar credenciais substituídas durante um login em andamento.
+- Configuração comercial versionada, redes sociais com domínios HTTPS validados, CNPJ numérico/alfanumérico com dígitos verificadores e lista de configuração antes de ativar vendas. A lista não certifica homologação nem situação cadastral.
 - Manutenção por CLI com prévia, lotes limitados, trava concorrente, auditoria e preservação de dados comerciais. Limpa sessões/tokens expirados, limites antigos, carrinhos inativos e e-mails enviados; agendamento externo documentado.
 - Migrations SQL, constraints, scripts de backup/restauração, CI e documentação.
 

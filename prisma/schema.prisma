@@ -273,6 +273,7 @@ model AuditLog {
   createdAt DateTime @default(now())
 }
 model Setting {
+  version Int @default(0)
   key String @id
   value Json
 }
