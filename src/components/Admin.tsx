@@ -1,4 +1,5 @@
 "use client";
+import OrderManagement from "./OrderManagement";
 import ReturnManagement from "./ReturnManagement";
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -423,79 +424,7 @@ export default function Admin({
             <MerchandisingPanel data={data} mutate={mutate} />
           )}
           {tab === "orders" && (
-            <section className="panel">
-              <h2>Gestão de pedidos</h2>
-              {!data.orders.length && <p>Nenhum pedido registrado.</p>}
-              {data.orders.map((o: any) => (
-                <details key={o.id}>
-                  <summary>
-                    #{o.id.slice(-8)} · {o.name} · {money(o.total)} ·{" "}
-                    {statusLabel[o.status]}
-                  </summary>
-                  <p>
-                    {o.email} · {o.phone}
-                  </p>
-                  {o.items.map((i: any) => (
-                    <p key={i.id}>
-                      {i.quantity}× {i.name} · {i.size}
-                    </p>
-                  ))}
-                  <p>Pagamento: {o.payment?.status || "pendente"}</p>
-                  <form
-                    className="form-grid"
-                    onSubmit={async (e) => {
-                      e.preventDefault();
-                      const f = Object.fromEntries(
-                        new FormData(e.currentTarget),
-                      );
-                      await mutate(
-                        "admin/orders/" + o.id,
-                        {
-                          status: f.status,
-                          ...(f.trackingCode
-                            ? { trackingCode: f.trackingCode }
-                            : {}),
-                          ...(f.trackingUrl
-                            ? { trackingUrl: f.trackingUrl }
-                            : {}),
-                        },
-                        "PATCH",
-                      );
-                    }}
-                  >
-                    <label>
-                      Próxima etapa
-                      <select name="status">
-                        {[
-                          "PREPARING",
-                          "SHIPPED",
-                          "IN_TRANSIT",
-                          "DELIVERED",
-                        ].map((s) => (
-                          <option key={s} value={s}>
-                            {statusLabel[s]}
-                          </option>
-                        ))}
-                      </select>
-                    </label>
-                    <label>
-                      Rastreio
-                      <input name="trackingCode" />
-                    </label>
-                    <label>
-                      Link HTTPS
-                      <input name="trackingUrl" type="url" />
-                    </label>
-                    <button className="btn">Atualizar logística</button>
-                  </form>
-                  <p className="muted">
-                    Pagamentos são confirmados pelo provedor. Cancelamentos
-                    financeiros e reembolsos exigem conciliação; não podem ser
-                    forçados pelo painel.
-                  </p>
-                </details>
-              ))}
-            </section>
+            <OrderManagement notify={notify} onChanged={load} />
           )}
           {tab === "customers" && (
             <UserPermissions

@@ -151,6 +151,8 @@ model Coupon {
   campaigns Campaign[]
 }
 model Order {
+  @@index([createdAt, id])
+  @@index([status, createdAt, id])
   id String @id @default(cuid())
   clientHash String @default("")
   requestHash String @default("")

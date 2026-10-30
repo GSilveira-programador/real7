@@ -5,7 +5,7 @@ O projeto está salvo em `/workspace/real7`, substituindo o site estático anter
 ## Estado validado
 
 - Next.js, React, TypeScript, PostgreSQL e Prisma funcionando localmente.
-- 66 testes unitários/integração e 34 testes desktop/celular aprovados.
+- 73 testes unitários/integração e 36 testes desktop/celular aprovados.
 - Build de produção e smoke test aprovados; auditoria de dependências de produção sem vulnerabilidades reportadas na última execução.
 - Backup PostgreSQL restaurado com 6 produtos, 54 variações e 7 migrations.
 - Nova etapa: banners e campanhas agendados, edição completa de atributos/galeria, variações arquiváveis, relatórios por período e recuperação de carrinho indisponível.
@@ -33,3 +33,5 @@ O usuário autorizou enviar o projeto e perguntou sobre os próximos salvamentos
 Etapa financeira: oitava migration adiciona data de atualização do provedor. Webhooks concorrentes são serializados; regressões/eventos antigos e pagamentos conflitantes são auditados; aprovação tardia exige análise e não altera estoque. Conciliação paginada recusa resultados parciais. Administração inicial no Codespaces do usuário foi adiada a pedido dele; não criar senha pública nem desativar MFA.
 
 Nova etapa: devoluções com lock por pedido, decisões versionadas, observação visível ao cliente, envio exclusivo de reembolso integral e consulta de tentativas incertas. Nona/décima migrations aplicadas localmente; detalhes em RETURNS.md. O servidor do Codespaces do usuário precisa atualizar código/cliente/migrations antes de refletir essa etapa.
+
+Gestão de pedidos: busca/paginação no histórico completo, detalhe sob demanda, filtros em dias de Brasília, projeção sem segredos e auditoria logística transacional. Décima primeira migration de índices aplicada localmente. Ver ORDER_MANAGEMENT.md.

@@ -120,3 +120,5 @@ Todas exigem conta staff com MFA; ações financeiras/catálogo exigem gerente/a
 A emissão da sessão usa lock da conta e confere a senha criptografada, o estado/segredo MFA e a versão de permissões que foram validados no início do login. Se mudarem, pede nova autenticação. Isso fecha corridas entre login, reset de senha, recuperação MFA e alterações de perfil. Nenhum desses valores privados é retornado ao frontend.
 
 Devoluções agora exigem `version` e `note` na decisão administrativa. Consulta de reembolso incerto: `POST /api/admin/returns/:id/reconcile`. Veja [RETURNS.md](RETURNS.md) para estados e limites financeiros.
+
+Gestão de pedidos: `GET /api/admin/orders` aceita `q`, `status`, `from`, `to`, `page`, `pageSize`; `GET /api/admin/orders/:id` retorna detalhes operacionais sem tokens. Consulte [ORDER_MANAGEMENT.md](ORDER_MANAGEMENT.md).

@@ -1,3 +1,4 @@
+import { listOrders, orderDetail } from "@/lib/order-management";
 import {
   requestReturn,
   decideReturn,
@@ -653,7 +654,7 @@ async function handler(
             db.order.findMany({
               take: 200,
               orderBy: { createdAt: "desc" },
-              include: { items: true, payment: true, shipment: true },
+              select: { id: true, status: true, total: true, createdAt: true },
             }),
             db.product.findMany({
               include: {
@@ -699,6 +700,16 @@ async function handler(
           }),
         });
       }
+      if (route === "admin/orders" && get)
+        return NextResponse.json(
+          await listOrders(
+            Object.fromEntries(
+              [...url.searchParams].filter(([, value]) => value !== ""),
+            ),
+          ),
+        );
+      if (path[1] === "orders" && path[2] && path.length === 3 && get)
+        return NextResponse.json(await orderDetail(path[2]));
       if (path[1] === "orders" && path[2] && method === "PATCH") {
         const d = z
           .object({
@@ -757,8 +768,15 @@ async function handler(
               body: `Pedido ${o.id}: ${d.status}. ${d.trackingCode || ""}`,
             },
           });
+          await tx.auditLog.create({
+            data: {
+              actorId: u.id,
+              action: "order.update",
+              entityId: o.id,
+              details: { from: o.status, to: d.status },
+            },
+          });
         });
-        await audit(u.id, "order.update", path[2]);
         return NextResponse.json({ ok: true });
       }
       if (!["ADMIN", "MANAGER"].includes(u.role))
