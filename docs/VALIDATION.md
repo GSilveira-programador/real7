@@ -5,8 +5,8 @@ Validação executada nesta máquina em 29/10/2026. Não representa homologaçã
 | Verificação                           | Resultado                                                               |
 | ------------------------------------- | ----------------------------------------------------------------------- |
 | TypeScript                            | `npm run typecheck` passou                                              |
-| Regras e integração PostgreSQL        | 57 testes passaram em 10 arquivos                                       |
-| Playwright desktop e celular          | 32 testes passaram                                                      |
+| Regras e integração PostgreSQL        | 66 testes passaram em 11 arquivos                                       |
+| Playwright desktop e celular          | 34 testes passaram                                                      |
 | Build de produção                     | `npm run build` passou                                                  |
 | Smoke do build compilado              | Home, catálogo e produto carregaram no Chromium, sem `pageerror`        |
 | Cabeçalhos de produção                | CSP, HSTS, nosniff e proteção de framing presentes no upstream local    |
@@ -30,3 +30,5 @@ Foram acrescentadas regressões de concorrência do carrinho: GET anônimo não 
 A manutenção temporária acrescentou quatro testes: validação de lote, prévia sem alterações, preservação de e-mails pendentes/dados comerciais, repetição idempotente, limite por tabela, carrinho bloqueado e recusa de execução concorrente. O teste de concorrência identificou uma reavaliação do subselect de DELETE pelo PostgreSQL; a seleção foi isolada em CTE MATERIALIZED para garantir o tamanho máximo do lote. A sétima migration adiciona índices temporais. Build e suíte de 44 testes reexecutados após a correção; os 32 E2E permanecem da última validação da interface, que não foi alterada nesta etapa.
 
 Etapa financeira: testes de dez webhooks simultâneos, eventos atrasados, regressão de estado, reembolso terminal, conflito de transações, aprovação tardia repetida sem alterar estoque e respostas inválidas. A conciliação é testada com 51 pagamentos em duas páginas, consulta vazia, divergência de referência, resposta parcial e falha de confirmação. Nenhuma operação financeira externa foi executada.
+
+Etapa de devoluções: nove testes de integração verificam concorrência de solicitações/operadores, transições, versão obsoleta, decisão registrada, reembolso integral, estoque preservado, timeout, consulta idempotente e divergências do provedor. O fluxo do navegador testa solicitação visitante, decisão/observação na área administrativa e visualização pelo cliente em desktop/celular; nenhuma requisição financeira real é feita. Os testes antigos de cupom e edição administrativa foram corrigidos para distinguir múltiplos status acessíveis e dispensar o consentimento antes de interagir com conteúdo coberto.

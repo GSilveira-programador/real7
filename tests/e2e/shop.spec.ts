@@ -26,7 +26,9 @@ test("catálogo, produto, estoque e persistência de carrinho", async ({
   await expect(page.locator(".cart-row")).toHaveCount(1);
   await page.getByLabel("Código do cupom").fill("ELITE10");
   await page.getByRole("button", { name: "Aplicar", exact: true }).click();
-  await expect(page.getByRole("status")).toContainText("Cupom aplicado");
+  await expect(page.locator(".toast[role=status]")).toContainText(
+    "Cupom aplicado",
+  );
   await page
     .getByRole("link", { name: "FINALIZAR COMPRA", exact: true })
     .click();

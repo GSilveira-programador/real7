@@ -94,3 +94,5 @@ tests/                   Testes unitários, integração PostgreSQL e E2E
 [Arquitetura](docs/ARCHITECTURE.md) · [APIs e integrações](docs/API.md) · [Pagamentos/frete/e-mail/imagens](docs/INTEGRATIONS.md) · [Produção e segurança](docs/PRODUCTION.md) · [Status e pendências](docs/STATUS.md)
 
 Manutenção de dados temporários: `npm run maintenance` mostra a prévia; veja [a política e o agendamento](docs/MAINTENANCE.md) antes de usar `--apply`.
+
+Devoluções e reembolso integral: [fluxo, estados e recuperação de respostas incertas](docs/RETURNS.md).

@@ -2592,28 +2592,58 @@ function OrderPage({
       </div>
       <section className="panel">
         <h2>Troca, devolução ou cancelamento</h2>
-        <form
-          onSubmit={async (e) => {
-            e.preventDefault();
-            try {
-              await api("orders/" + id + "/returns?access=" + (access || ""), {
-                reason: new FormData(e.currentTarget).get("reason"),
-              });
-              notify("Solicitação registrada para análise da equipe.");
-            } catch (err) {
-              notify((err as Error).message);
-            }
-          }}
-        >
-          <label>
-            Conte o que aconteceu
-            <textarea required minLength={10} maxLength={2000} name="reason" />
-          </label>
-          <button className="btn">Enviar solicitação</button>
-        </form>
+        {["PAID", "PREPARING", "SHIPPED", "IN_TRANSIT", "DELIVERED"].includes(
+          order.status,
+        ) && !order.returns.some((r: any) => r.status !== "rejected") ? (
+          <form
+            onSubmit={async (e) => {
+              e.preventDefault();
+              try {
+                const created = await api(
+                  "orders/" + id + "/returns?access=" + (access || ""),
+                  {
+                    reason: new FormData(e.currentTarget).get("reason"),
+                  },
+                );
+                setOrder({ ...order, returns: [...order.returns, created] });
+                notify("Solicitação registrada para análise da equipe.");
+              } catch (err) {
+                notify((err as Error).message);
+              }
+            }}
+          >
+            <label>
+              Conte o que aconteceu
+              <textarea
+                required
+                minLength={10}
+                maxLength={2000}
+                name="reason"
+              />
+            </label>
+            <button className="btn">Enviar solicitação</button>
+          </form>
+        ) : (
+          <p>
+            Acompanhe a solicitação existente abaixo. Novas solicitações
+            dependem da situação do pedido e da análise anterior.
+          </p>
+        )}
         {order.returns.map((r: any) => (
           <p key={r.id}>
-            Solicitação: {r.reason} — {r.status}
+            Solicitação: {r.reason} —{" "}
+            {(
+              {
+                requested: "Em análise",
+                approved: "Aprovada",
+                rejected: "Não aprovada",
+                received: "Produto recebido",
+                refunded: "Reembolso confirmado",
+              } as Record<string, string>
+            )[r.status] || r.status}
+            {r.decisionNote && (
+              <span> · Observação da equipe: {r.decisionNote}</span>
+            )}
           </p>
         ))}
       </section>

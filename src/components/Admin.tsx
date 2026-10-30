@@ -1,4 +1,5 @@
 "use client";
+import ReturnManagement from "./ReturnManagement";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import {
@@ -575,63 +576,11 @@ export default function Admin({
           )}
           {tab === "returns" && (
             <>
-              <section className="panel">
-                <h2>Solicitações de devolução</h2>
-                {data.returns.length ? (
-                  data.returns.map((r: any) => (
-                    <div key={r.id}>
-                      <p>
-                        Pedido {r.orderId} · {r.reason} · {r.status}
-                      </p>
-                      <div className="inline-form">
-                        {(
-                          {
-                            requested: ["approved", "rejected"],
-                            approved: ["received"],
-                            received: ["refunded"],
-                          } as Record<string, string[]>
-                        )[r.status]?.map((next) => (
-                          <button
-                            key={next}
-                            className="btn secondary btn-small"
-                            onClick={() => {
-                              if (
-                                next !== "refunded" ||
-                                window.confirm(
-                                  "Confirmar reembolso integral pelo provedor? Esta operação financeira não pode ser desfeita.",
-                                )
-                              )
-                                mutate(
-                                  "admin/returns/" + r.id,
-                                  { status: next },
-                                  "PATCH",
-                                );
-                            }}
-                          >
-                            {
-                              (
-                                {
-                                  approved: "Aprovar",
-                                  rejected: "Recusar",
-                                  received: "Confirmar recebimento",
-                                  refunded: "Reembolsar integralmente",
-                                } as Record<string, string>
-                              )[next]
-                            }
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <p>Nenhuma solicitação.</p>
-                )}
-                <p className="muted">
-                  O reembolso depende da confirmação do provedor. Confira o
-                  recebimento físico e ajuste o estoque separadamente após
-                  inspeção.
-                </p>
-              </section>
+              <ReturnManagement
+                requests={data.returns}
+                reload={load}
+                notify={notify}
+              />
               <section className="panel">
                 <h2>Moderação de avaliações</h2>
                 {data.reviews.length ? (

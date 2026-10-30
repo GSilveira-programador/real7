@@ -1,4 +1,9 @@
 import {
+  requestReturn,
+  decideReturn,
+  reconcileReturnRefund,
+} from "@/lib/returns";
+import {
   subscribe,
   requestSubscriptionPreferences,
   confirmSubscription,
@@ -37,7 +42,7 @@ import {
   checkoutSchema,
 } from "@/lib/validation";
 import { quote, shipping, settings, mail } from "@/lib/commerce";
-import { mp, verifyWebhook, syncPayment } from "@/lib/payments";
+import { verifyWebhook, syncPayment } from "@/lib/payments";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 const clean = (u: any) =>
@@ -456,26 +461,9 @@ async function handler(
       )
         throw new HttpError(404, "Pedido não encontrado.");
       if (path[2] === "returns" && method === "POST") {
-        const d = z
-          .object({ reason: z.string().min(10).max(2000) })
-          .parse(await body());
-        if (
-          !["PAID", "PREPARING", "SHIPPED", "IN_TRANSIT", "DELIVERED"].includes(
-            o.status,
-          )
-        )
-          throw new HttpError(400, "Pedido não elegível.");
-        if (
-          await db.returnRequest.findFirst({
-            where: { orderId: o.id, status: "requested" },
-          })
-        )
-          throw new HttpError(409, "Solicitação já existente.");
-        return NextResponse.json(
-          await db.returnRequest.create({
-            data: { orderId: o.id, reason: d.reason },
-          }),
-        );
+        return NextResponse.json(await requestReturn(o.id, await body()), {
+          status: 201,
+        });
       }
       if (get) {
         const {
@@ -962,61 +950,23 @@ async function handler(
         await audit(u.id, "settings.update", "store");
         return NextResponse.json(d);
       }
-      if (path[1] === "returns" && path[2] && method === "PATCH") {
-        const d = z
-          .object({
-            status: z.enum(["approved", "rejected", "received", "refunded"]),
-          })
-          .parse(await body());
-        const r = await db.returnRequest.findUniqueOrThrow({
-          where: { id: path[2] },
-          include: { order: { include: { payment: true } } },
-        });
-        const allowed: Record<string, string[]> = {
-          requested: ["approved", "rejected"],
-          approved: ["received"],
-          received: ["refunded"],
-        };
-        if (!allowed[r.status]?.includes(d.status))
-          throw new HttpError(409, "Transição de devolução inválida.");
-        if (d.status === "refunded") {
-          if (!r.order.payment?.providerId)
-            throw new HttpError(409, "Pagamento não conciliado.");
-          const refund = await mp(
-            "/v1/payments/" + r.order.payment.providerId + "/refunds",
-            { amount: r.order.total / 100 },
-            "refund-" + r.id,
-          );
-          if (refund.status !== "approved")
-            throw new HttpError(
-              502,
-              "Reembolso ainda não confirmado pelo provedor.",
-            );
-          await db.order.update({
-            where: { id: r.orderId },
-            data: { status: "REFUNDING" },
-          });
-          await db.orderEvent.create({
-            data: {
-              orderId: r.orderId,
-              status: "REFUNDING",
-              note: "Reembolso confirmado pela API; devolução em conciliação.",
-            },
-          });
-          await mail(
-            r.order.email,
-            "Reembolso confirmado",
-            `Pedido ${r.orderId}: o provedor confirmou o reembolso. Prazo de crédito depende da instituição financeira.`,
-          );
-        }
-        const changed = await db.returnRequest.updateMany({
-          where: { id: r.id, status: r.status },
-          data: { status: d.status },
-        });
-        if (!changed.count) throw new HttpError(409, "Solicitação alterada.");
-        await audit(u.id, "return." + d.status, r.id);
-        return NextResponse.json({ ok: true });
-      }
+      if (
+        path[1] === "returns" &&
+        path[2] &&
+        path.length === 3 &&
+        method === "PATCH"
+      )
+        return NextResponse.json(
+          await decideReturn(path[2], await body(), u.id),
+        );
+      if (
+        path[1] === "returns" &&
+        path[2] &&
+        path[3] === "reconcile" &&
+        path.length === 4 &&
+        method === "POST"
+      )
+        return NextResponse.json(await reconcileReturnRefund(path[2], u.id));
       if (route === "admin/audit" && get) {
         if (u.role !== "ADMIN") throw new HttpError(403, "Sem permissão.");
         return NextResponse.json(

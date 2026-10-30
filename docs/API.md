@@ -118,3 +118,5 @@ Todas exigem conta staff com MFA; ações financeiras/catálogo exigem gerente/a
 `GET /cart` anônimo retorna `[]` sem Set-Cookie. O identificador HttpOnly só é emitido após um PUT válido e persistido, evitando que respostas de leituras concorrentes troquem a identidade de um carrinho já gravado. PUT recusa linhas repetidas e mantém limites de quantidade. O cliente inicializa uma vez, bloqueia gravações quando a leitura falha e permite tentar novamente; respostas antigas de cotação não substituem os valores atuais. A conclusão do checkout fica indisponível durante a recotação.
 
 A emissão da sessão usa lock da conta e confere a senha criptografada, o estado/segredo MFA e a versão de permissões que foram validados no início do login. Se mudarem, pede nova autenticação. Isso fecha corridas entre login, reset de senha, recuperação MFA e alterações de perfil. Nenhum desses valores privados é retornado ao frontend.
+
+Devoluções agora exigem `version` e `note` na decisão administrativa. Consulta de reembolso incerto: `POST /api/admin/returns/:id/reconcile`. Veja [RETURNS.md](RETURNS.md) para estados e limites financeiros.

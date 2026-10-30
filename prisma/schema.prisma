@@ -250,6 +250,11 @@ model Favorite {
   @@id([userId, productId])
 }
 model ReturnRequest {
+  @@index([orderId])
+  version Int @default(0)
+  decisionNote String?
+  refundState String @default("new")
+  refundId String?
   id String @id @default(cuid())
   orderId String
   order Order @relation(fields: [orderId], references: [id])

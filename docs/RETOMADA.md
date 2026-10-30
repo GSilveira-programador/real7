@@ -5,7 +5,7 @@ O projeto está salvo em `/workspace/real7`, substituindo o site estático anter
 ## Estado validado
 
 - Next.js, React, TypeScript, PostgreSQL e Prisma funcionando localmente.
-- 57 testes unitários/integração e 32 testes desktop/celular aprovados.
+- 66 testes unitários/integração e 34 testes desktop/celular aprovados.
 - Build de produção e smoke test aprovados; auditoria de dependências de produção sem vulnerabilidades reportadas na última execução.
 - Backup PostgreSQL restaurado com 6 produtos, 54 variações e 7 migrations.
 - Nova etapa: banners e campanhas agendados, edição completa de atributos/galeria, variações arquiváveis, relatórios por período e recuperação de carrinho indisponível.
@@ -31,3 +31,5 @@ Nunca envie .env, credenciais ou backups com dados pessoais para o GitHub. O bac
 O usuário autorizou enviar o projeto e perguntou sobre os próximos salvamentos. Durante o trabalho nesta conversa, agrupar alterações em etapas coerentes, validar, criar commit e enviar ao GitHub, preservando segredos e dados locais. Não instalar hooks de push a cada arquivo nem afirmar sincronização em segundo plano. No VS Code local, usar Git Pull para receber commits; salvar um arquivo por si só não cria commit nem push.
 
 Etapa financeira: oitava migration adiciona data de atualização do provedor. Webhooks concorrentes são serializados; regressões/eventos antigos e pagamentos conflitantes são auditados; aprovação tardia exige análise e não altera estoque. Conciliação paginada recusa resultados parciais. Administração inicial no Codespaces do usuário foi adiada a pedido dele; não criar senha pública nem desativar MFA.
+
+Nova etapa: devoluções com lock por pedido, decisões versionadas, observação visível ao cliente, envio exclusivo de reembolso integral e consulta de tentativas incertas. Nona/décima migrations aplicadas localmente; detalhes em RETURNS.md. O servidor do Codespaces do usuário precisa atualizar código/cliente/migrations antes de refletir essa etapa.

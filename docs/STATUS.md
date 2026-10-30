@@ -7,7 +7,7 @@
 - Carrinho persistido no banco por cookie HttpOnly; cálculo de preços/cupom no servidor; checkout visitante/conta com reserva transacional e idempotência.
 - Autenticação bcrypt, sessões revogáveis, verificação/reset por token de uso único e outbox SMTP; MFA TOTP para administração com segredo criptografado e prova MFA vinculada à sessão. Sessões antigas sem essa prova não acessam a administração.
 - Alteração de perfis pela interface com código MFA, motivo auditado, versão de permissões e revogação de sessões. Último administrador protegido inclusive contra despromoções simultâneas. Recuperação de MFA apenas por comando operacional no servidor.
-- Conta, endereços, favoritos, histórico, pedido/rastreio, exportação LGPD, anonimização e solicitação de devolução.
+- Conta, endereços, favoritos, histórico, pedido/rastreio, exportação LGPD, anonimização e solicitação de devolução. Devoluções têm decisões versionadas com observação ao cliente, tentativa exclusiva de reembolso integral e consulta de respostas incertas, sem reposição automática de estoque.
 - Painel com permissões, catálogo/estoque por tamanho, marcas/categorias, cupons, clientes, logística, moderação, devoluções, auditoria, configuração comercial e banner.
 - Campanhas e banners agendados, pausa por campanha, carrossel manual acessível e trilha de auditoria. Edição de atributos, galeria ordenada, cadastro/arquivamento de variações e controle de versões contra sobrescrita concorrente.
 - Relatórios agregados no servidor por período, em dias de Brasília, sem corte de 200 pedidos; totais, faturamento diário, situações e produtos vendidos.

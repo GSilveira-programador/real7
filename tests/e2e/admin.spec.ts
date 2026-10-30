@@ -112,6 +112,11 @@ test("MFA, permissões, cadastro de produto, estoque e exportação", async ({
     expect(stale.status()).toBe(409);
     await context.addCookies((await request.storageState()).cookies);
     await page.goto("/admin");
+    const consent = page.getByRole("button", {
+      name: "Somente essenciais",
+      exact: true,
+    });
+    if (await consent.isVisible()) await consent.click();
     await page
       .getByRole("button", { name: "Produtos e estoque", exact: true })
       .click();
