@@ -4,7 +4,11 @@ export const imageUrl = z
   .string()
   .max(2000)
   .refine((value) => {
-    if (/^\/images\/[a-zA-Z0-9._-]+$/.test(value)) return true;
+    if (
+      /^\/images\/[a-zA-Z0-9._-]+$/.test(value) ||
+      /^\/images\/uploads\/[a-z0-9]+\.webp$/.test(value)
+    )
+      return true;
     try {
       const url = new URL(value);
       return url.protocol === "https:" && !url.username && !url.password;

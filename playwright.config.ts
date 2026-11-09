@@ -1,6 +1,8 @@
 import { defineConfig } from "@playwright/test";
 export default defineConfig({
   testDir: "tests/e2e",
+  testIgnore:
+    process.env.BOOTSTRAP_E2E === "true" ? [] : ["**/bootstrap.spec.ts"],
   fullyParallel: false,
   use: {
     baseURL: process.env.E2E_URL || "http://localhost:3000",

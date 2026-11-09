@@ -1,4 +1,6 @@
-import { readFile, writeFile, chmod } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { readFile, writeFile, chmod, mkdtemp, rm } from "node:fs/promises";
 import { randomBytes } from "node:crypto";
 import { spawnSync } from "node:child_process";
 import { Client } from "pg";
@@ -63,26 +65,34 @@ async function main() {
     if (list.status !== 0) throw new Error("Falha ao listar containers.");
     if (list.stdout.split("\n").includes("elite-postgres"))
       throw new Error("Container existente não pôde ser inspecionado.");
-    const result = docker(
-      [
+    const directory = await mkdtemp(join(tmpdir(), "jn-postgres-"));
+    try {
+      const envPath = join(directory, "postgres.env");
+      await writeFile(
+        envPath,
+        `POSTGRES_USER=${decodeURIComponent(target.username)}\nPOSTGRES_PASSWORD=${decodeURIComponent(target.password)}\nPOSTGRES_DB=elite_boots\n`,
+        { mode: 0o600 },
+      );
+      const result = docker([
         "run",
         "-d",
         "--name",
         "elite-postgres",
         "--env-file",
-        "/dev/stdin",
+        envPath,
         "-p",
         "127.0.0.1:5432:5432",
         "-v",
         "elite-pgdata:/var/lib/postgresql/data",
         "postgres:17-alpine",
-      ],
-      `POSTGRES_USER=${decodeURIComponent(target.username)}\nPOSTGRES_PASSWORD=${decodeURIComponent(target.password)}\nPOSTGRES_DB=elite_boots\n`,
-    );
-    if (result.status !== 0)
-      throw new Error(
-        "Falha ao criar PostgreSQL local. Confira a disponibilidade da imagem e da porta; nenhum dado existente foi removido.",
-      );
+      ]);
+      if (result.status !== 0)
+        throw new Error(
+          "Falha ao criar PostgreSQL local. Confira a disponibilidade da imagem e da porta; nenhum dado existente foi removido.",
+        );
+    } finally {
+      await rm(directory, { recursive: true, force: true });
+    }
   }
   let ready = false;
   for (let i = 0; i < 40; i++) {

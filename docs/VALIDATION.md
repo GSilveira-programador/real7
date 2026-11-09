@@ -5,8 +5,8 @@ Validação executada nesta máquina em 29/10/2026. Não representa homologaçã
 | Verificação                           | Resultado                                                               |
 | ------------------------------------- | ----------------------------------------------------------------------- |
 | TypeScript                            | `npm run typecheck` passou                                              |
-| Regras e integração PostgreSQL        | 81 testes passaram em 13 arquivos                                       |
-| Playwright desktop e celular          | 38 testes passaram                                                      |
+| Regras e integração PostgreSQL        | 89 testes passaram em 15 arquivos                                       |
+| Playwright desktop e celular          | 40 testes passaram, mais 2 de bootstrap isolado                         |
 | Build de produção                     | `npm run build` passou                                                  |
 | Smoke do build compilado              | Home, catálogo e produto carregaram no Chromium, sem `pageerror`        |
 | Cabeçalhos de produção                | CSP, HSTS, nosniff e proteção de framing presentes no upstream local    |
@@ -36,3 +36,5 @@ Etapa de devoluções: nove testes de integração verificam concorrência de so
 Gestão de pedidos: sete testes adicionais cobrem paginação de 201 pedidos empatados por data, recuperação do pedido antigo, filtros de situação/rastreio/e-mail, limites de datas em Brasília, erros e projeção de campos privados. Navegador testa atendente autenticado, acesso anônimo bloqueado, paginação, detalhe e atualização logística auditada.
 
 Configuração comercial: oito testes adicionais cobrem CNPJ numérico/alfanumérico, links maliciosos, normalização de telefone, centavos, projeção sem segredos, controle de versões concorrentes e bloqueio de ativação incompleta. O navegador valida edição de atendimento/perfil social, rejeição de versão antiga e exibição no contato, sem ativar vendas.
+
+Acesso e fotos: testes de convite por e-mail/token com expiração, uso único e aceitação concorrente; preservação de conta existente; hash da senha; validação de imagens, reencodificação sem EXIF, resize, upload no PostgreSQL e rota pública WebP. Primeiro acesso é testado isoladamente até a ativação MFA e abertura do painel (2 projetos). Os E2E de catálogo testam formulário, upload de capa/galeria, busca, rascunho, preço/cor, quantidades distintas por tamanho e imagem pública, sem S3. O modo StrictMode do React foi considerado na leitura do fragmento privado do convite.

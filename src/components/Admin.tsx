@@ -32,7 +32,8 @@ export default function Admin({
   const [data, setData] = useState<any>(null),
     [error, setError] = useState(""),
     [tab, setTab] = useState("overview"),
-    [adding, setAdding] = useState(false);
+    [adding, setAdding] = useState(false),
+    [productSearch, setProductSearch] = useState("");
   const load = () =>
     api("admin/dashboard")
       .then(setData)
@@ -59,6 +60,9 @@ export default function Admin({
         <p>Entre com uma conta autorizada e autenticação multifator.</p>
         <Link className="btn" href="/conta">
           Entrar na conta
+        </Link>
+        <Link className="text-button" href="/admin/ativar">
+          Primeiro acesso → Criar administrador
         </Link>
       </div>
     );
@@ -218,6 +222,16 @@ export default function Admin({
                   <Plus size={17} /> Novo produto
                 </button>
               </div>
+              <label>
+                Buscar produto por nome, modelo ou cor
+                <input
+                  type="search"
+                  value={productSearch}
+                  maxLength={100}
+                  onChange={(e) => setProductSearch(e.target.value)}
+                  placeholder="Ex.: Mercurial laranja"
+                />
+              </label>
               {adding && (
                 <form
                   className="panel form-grid"
@@ -239,7 +253,7 @@ export default function Admin({
                         compareAt: f.compareAt
                           ? Math.round(Number(f.compareAt) * 100)
                           : null,
-                        active: true,
+                        active: false,
                         featured: false,
                         demo: false,
                         weightGrams: Number(f.weightGrams),
@@ -254,7 +268,15 @@ export default function Admin({
                     }
                   }}
                 >
-                  <h3 className="span-two">Cadastrar produto real</h3>
+                  <h3 className="span-two">Cadastrar produto</h3>
+                  <p className="muted span-two">
+                    O produto começa como rascunho inativo. Use um cadastro para
+                    cada cor. Envie a foto de capa; depois de salvar, abra o
+                    produto para adicionar a galeria e ajustar os tamanhos. Para
+                    encomendas, não informe estoque físico inexistente: mantenha
+                    o produto inativo até definir a disponibilidade com o
+                    fornecedor.
+                  </p>
                   <label className="span-two">
                     Enviar imagem (JPEG, PNG ou WebP, até 5 MB)
                     <input
@@ -262,6 +284,7 @@ export default function Admin({
                       accept="image/jpeg,image/png,image/webp"
                       onChange={async (e) => {
                         const f = e.target.files?.[0];
+                        const uploadForm = e.currentTarget.form;
                         if (!f) return;
                         try {
                           const r = await fetch("/api/admin/uploads", {
@@ -271,7 +294,7 @@ export default function Admin({
                           });
                           const d = await r.json();
                           if (!r.ok) throw new Error(d.error);
-                          const input = e.target.form?.elements.namedItem(
+                          const input = uploadForm?.elements.namedItem(
                             "image",
                           ) as HTMLInputElement;
                           if (input) input.value = d.url;
@@ -289,7 +312,7 @@ export default function Admin({
                     ["color", "Cor"],
                     ["material", "Material"],
                     ["sole", "Solado"],
-                    ["image", "URL HTTPS da imagem autorizada"],
+                    ["image", "Endereço da foto (preenchido ao enviar)"],
                     ["price", "Preço em reais"],
                     ["compareAt", "Preço anterior (opcional)"],
                     ["sizes", "Numerações separadas por vírgula"],
@@ -359,21 +382,27 @@ export default function Admin({
                   </label>
                   <button className="btn">Salvar produto</button>
                   <p className="muted">
-                    Use imagens hospedadas em armazenamento com autorização de
-                    uso. O upload usa armazenamento S3 configurado pelo
-                    servidor.
+                    Envie fotos autorizadas diretamente do seu computador ou
+                    celular. A primeira imagem será a capa do produto.
                   </p>
                 </form>
               )}
-              {data.products.map((p: any) => (
-                <ProductEditor
-                  key={p.id + ":" + p.version}
-                  product={p}
-                  brands={data.brands}
-                  categories={data.categories}
-                  mutate={mutate}
-                />
-              ))}
+              {data.products
+                .filter((p: any) =>
+                  [p.name, p.model, p.color, p.brand?.name]
+                    .join(" ")
+                    .toLocaleLowerCase("pt-BR")
+                    .includes(productSearch.trim().toLocaleLowerCase("pt-BR")),
+                )
+                .map((p: any) => (
+                  <ProductEditor
+                    key={p.id + ":" + p.version}
+                    product={p}
+                    brands={data.brands}
+                    categories={data.categories}
+                    mutate={mutate}
+                  />
+                ))}
               <section className="panel">
                 <h3>Marcas e categorias</h3>
                 <form

@@ -19,7 +19,9 @@
     "format:check": "prettier --check src scripts tests *.ts *.mjs *.json docs README.md .github/workflows",
     "setup:cloud": "tsx scripts/cloud-local.ts",
     "admin:recover-mfa": "tsx scripts/recover-mfa.ts",
-    "maintenance": "tsx scripts/maintenance.ts"
+    "maintenance": "tsx scripts/maintenance.ts",
+    "admin:invite": "tsx scripts/invite-admin.ts",
+    "test:e2e:bootstrap": "BOOTSTRAP_E2E=true playwright test tests/e2e/bootstrap.spec.ts --workers=1"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1159.0",
@@ -38,6 +40,7 @@
     "qrcode": "^1.5.4",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+    "sharp": "^0.35.5",
     "undici": "^8.12.3",
     "zod": "^4.0.0"
   },

@@ -1,3 +1,4 @@
+import { acceptAdminInvitation } from "@/lib/admin-invitation";
 import {
   saveStoreSettings,
   configurationReadiness,
@@ -125,6 +126,14 @@ async function handler(
     }
     if (route === "banners" && get)
       return NextResponse.json(await activeBanners());
+    if (route === "auth/admin-invitation" && method === "POST") {
+      const data = await body();
+      const candidate = z.object({ token: z.string().max(64) }).parse(data);
+      await limit("admin-invite:" + hash(candidate.token), 5);
+      return NextResponse.json(await acceptAdminInvitation(data), {
+        status: 201,
+      });
+    }
     if (route === "store" && get) return NextResponse.json(await settings());
     if (route === "catalog" && get) {
       const s = url.searchParams;

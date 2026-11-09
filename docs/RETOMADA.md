@@ -5,7 +5,7 @@ O projeto está salvo em `/workspace/real7`, substituindo o site estático anter
 ## Estado validado
 
 - Next.js, React, TypeScript, PostgreSQL e Prisma funcionando localmente.
-- 81 testes unitários/integração e 38 testes desktop/celular aprovados.
+- 89 testes unitários/integração, 40 testes desktop/celular e 2 testes isolados de primeiro acesso aprovados.
 - Build de produção e smoke test aprovados; auditoria de dependências de produção sem vulnerabilidades reportadas na última execução.
 - Backup PostgreSQL restaurado com 6 produtos, 54 variações e 7 migrations.
 - Nova etapa: banners e campanhas agendados, edição completa de atributos/galeria, variações arquiváveis, relatórios por período e recuperação de carrinho indisponível.
@@ -37,3 +37,5 @@ Nova etapa: devoluções com lock por pedido, decisões versionadas, observaçã
 Gestão de pedidos: busca/paginação no histórico completo, detalhe sob demanda, filtros em dias de Brasília, projeção sem segredos e auditoria logística transacional. Décima primeira migration de índices aplicada localmente. Ver ORDER_MANAGEMENT.md.
 
 Configuração comercial: versão contra sobrescritas, auditoria transacional, validação de CNPJ numérico/alfanumérico e redes sociais, exibição de perfis/CNPJ e preparação para ativação. Décima segunda migration aplicada localmente. Reiniciar servidor após gerar o cliente/migrar; STORE_SETTINGS.md explica limites da lista, que não é homologação.
+
+Etapa de acesso e catálogo: convite inicial emitido com `npm run admin:invite`, senha escolhida no navegador, MFA obrigatório, upload de fotos no banco/S3 com reencodificação e galeria múltipla. Rascunhos inativos, busca administrativa e cadastro separado por cor. Décima terceira migration aplicada localmente; guia ADMIN_CATALOG.md. O ambiente foi recriado e o PostgreSQL local foi inicializado novamente com dados fictícios, sem conexão com o Codespaces do usuário. Não foi criado administrador permanente.

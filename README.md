@@ -96,3 +96,7 @@ tests/                   Testes unitários, integração PostgreSQL e E2E
 Manutenção de dados temporários: `npm run maintenance` mostra a prévia; veja [a política e o agendamento](docs/MAINTENANCE.md) antes de usar `--apply`.
 
 Devoluções e reembolso integral: [fluxo, estados e recuperação de respostas incertas](docs/RETURNS.md).
+
+## Acesso administrativo e fotos
+
+Para o primeiro administrador, execute `npm run admin:invite` no ambiente da loja: você receberá um link privado para escolher a senha no navegador e depois configurar MFA. No painel, cadastre produtos, uma cor por cadastro, fotos e estoque por tamanho. Upload direto já funciona sem S3 usando o banco (cota de 500 MB). Veja [o guia do catálogo](docs/ADMIN_CATALOG.md).

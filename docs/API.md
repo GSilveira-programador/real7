@@ -124,3 +124,5 @@ Devoluções agora exigem `version` e `note` na decisão administrativa. Consult
 Gestão de pedidos: `GET /api/admin/orders` aceita `q`, `status`, `from`, `to`, `page`, `pageSize`; `GET /api/admin/orders/:id` retorna detalhes operacionais sem tokens. Consulte [ORDER_MANAGEMENT.md](ORDER_MANAGEMENT.md).
 
 Configurações: `PUT /api/admin/settings` exige `version`. Novos campos públicos: `instagram`, `facebook`, `youtube`, `nationwideShipping`, `legalReviewed`. `GET /api/admin/settings/readiness` retorna apenas indicadores de configuração; ambos exclusivos do administrador. Ver [STORE_SETTINGS.md](STORE_SETTINGS.md).
+
+Bootstrap administrativo: `POST /api/auth/admin-invitation` aceita token privado, e-mail, nome e senha; consome convite inicial sem criar sessão privilegiada. Upload `POST /api/admin/uploads` aceita imagem bruta de gerente/admin com MFA e devolve URL local ou S3. Mídia reencodificada é servida em `GET /images/uploads/:id.webp`. Ver [ADMIN_CATALOG.md](ADMIN_CATALOG.md).

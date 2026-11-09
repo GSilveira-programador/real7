@@ -8,11 +8,12 @@
 - Autenticação bcrypt, sessões revogáveis, verificação/reset por token de uso único e outbox SMTP; MFA TOTP para administração com segredo criptografado e prova MFA vinculada à sessão. Sessões antigas sem essa prova não acessam a administração.
 - Alteração de perfis pela interface com código MFA, motivo auditado, versão de permissões e revogação de sessões. Último administrador protegido inclusive contra despromoções simultâneas. Recuperação de MFA apenas por comando operacional no servidor.
 - Conta, endereços, favoritos, histórico, pedido/rastreio, exportação LGPD, anonimização e solicitação de devolução. Devoluções têm decisões versionadas com observação ao cliente, tentativa exclusiva de reembolso integral e consulta de respostas incertas, sem reposição automática de estoque.
+- Primeiro acesso administrativo por convite emitido no servidor, de uso único e com expiração, senha definida no navegador e MFA obrigatório para o painel. Sem senha pública ou promoção automática de clientes.
 - Painel com permissões, catálogo/estoque por tamanho, marcas/categorias, cupons, clientes, logística, moderação, devoluções, auditoria, configuração comercial e banner. Pedidos têm busca combinada com situação/data, paginação no histórico completo e detalhes sob demanda com endereço, SKU, rastreio e eventos; auditoria logística é transacional.
 - Campanhas e banners agendados, pausa por campanha, carrossel manual acessível e trilha de auditoria. Edição de atributos, galeria ordenada, cadastro/arquivamento de variações e controle de versões contra sobrescrita concorrente.
 - Relatórios agregados no servidor por período, em dias de Brasília, sem corte de 200 pedidos; totais, faturamento diário, situações e produtos vendidos.
 - Carrinho recuperável quando um produto/tamanho é arquivado ou perde estoque. Leitura anônima não cria cookie; inicialização e gravações são protegidas contra corridas, respostas de cotação antigas são descartadas e falhas de carregamento exigem recuperação antes de sobrescrever dados.
-- Exportação CSV e Excel. Upload S3 com checagem básica de formato/tamanho e autorização de gerente/admin.
+- Exportação CSV e Excel. Upload direto no banco ou S3 com decodificação, reencodificação WebP, remoção de metadados e limites de tamanho/pixels; envio múltiplo na galeria. Cadastro por cor separado e rascunhos inicialmente inativos.
 - Integração de checkout hospedado Mercado Pago, webhook HMAC, consulta de confirmação, deduplicação sob concorrência, proteção contra eventos fora de ordem e reembolso integral preparado. Aprovação após cancelamento segue para análise sem alterar estoque. Conciliação paginada detecta resultados incompletos. Nenhuma aprovação de pagamento pelo navegador.
 - Integração de cotação Melhor Envio com dados de embalagem e regra de frete grátis. SMTP e imagens S3 configuráveis.
 - Contato persistido, newsletter com confirmação de e-mail, consentimento versionado, recuperação de link de preferências e descadastro sem login. Inscrições só são ativadas após confirmação e e-mails pendentes da newsletter são removidos ao cancelar. WhatsApp oculto sem número comercial e minutas legais claramente identificadas.
@@ -23,7 +24,7 @@
 
 ## Dependências externas para homologação
 
-- Credenciais e contas de teste/produção de Mercado Pago e Melhor Envio, SMTP/TCP e S3/CDN.
+- Credenciais e contas de teste/produção de Mercado Pago e Melhor Envio e SMTP/TCP. S3/CDN é opcional para fotos; sem ele o upload usa o banco, com cota documentada.
 - Testes financeiros fim a fim no ambiente do provedor; testes de envio SMTP, upload real e cotação real com dados da operação. Os testes automatizados usam respostas isoladas de teste onde não há credenciais.
 - Dados da empresa, CNPJ, domínio/HTTPS, atendimento, catálogo real, estoque físico, logística fiscal e revisão jurídica.
 - Hospedagem escolhida, CD, monitoramento/alertas e backups externos agendados.
@@ -37,6 +38,6 @@
 - Aprovação jurídica de retenção de dados comerciais/consentimentos, agendamento e alertas da limpeza temporária; integração da recuperação operacional de MFA ao processo de autorização/identificação da equipe.
 - Reembolso parcial/contestação, emissão fiscal/ERP e antifraude adicional.
 - WhatsApp Business API oficial e disparos de campanhas de marketing. A newsletter já tem confirmação/descadastro e notificações transacionais, mas não há envio promocional em lote.
-- Teste independente de segurança, mídia reencodificada, revisão manual de acessibilidade e testes de carga.
+- Teste independente de segurança, revisão manual de acessibilidade, testes de carga e gestão/limpeza segura de mídia órfã.
 
 As funções dependentes de credenciais falham de forma explícita quando não configuradas. Modo demonstração não simula vendas, depoimentos ou entregas reais. Esta entrega é uma aplicação funcional para desenvolvimento/homologação, **não uma certificação de prontidão comercial nem conclusão integral de todos os requisitos avançados**.

@@ -1,3 +1,4 @@
+import { imageUrl } from "./merchandising";
 import { z } from "zod";
 export const email = z
   .email()
@@ -64,10 +65,7 @@ export const productSchema = z
     active: z.boolean().default(true),
     featured: z.boolean().default(false),
     demo: z.boolean().default(false),
-    image: z
-      .string()
-      .url()
-      .refine((v) => new URL(v).protocol === "https:"),
+    image: imageUrl,
     variants: z
       .array(
         z.object({

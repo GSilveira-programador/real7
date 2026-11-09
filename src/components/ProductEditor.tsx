@@ -166,9 +166,64 @@ export default function ProductEditor({
             </p>
           )}
           {uploading && <p role="status">Enviando imagem…</p>}
+          <label>
+            Adicionar várias fotos desta cor (até {10 - images.length})
+            <input
+              type="file"
+              multiple
+              accept="image/jpeg,image/png,image/webp"
+              disabled={uploading || images.length >= 10}
+              onChange={async (e) => {
+                const files = Array.from(e.target.files || []);
+                e.target.value = "";
+                if (files.length > 10 - images.length) {
+                  setUploadError(
+                    "A galeria aceita até 10 fotos por produto/cor.",
+                  );
+                  return;
+                }
+                setUploading(true);
+                setUploadError("");
+                try {
+                  for (const file of files) {
+                    if (file.size > 5 * 1024 * 1024)
+                      throw new Error("Cada imagem deve ter no máximo 5 MB.");
+                    const response = await fetch("/api/admin/uploads", {
+                      method: "POST",
+                      headers: { "Content-Type": file.type },
+                      body: file,
+                    });
+                    const result = await response.json();
+                    if (!response.ok)
+                      throw new Error(result.error || "Falha no envio.");
+                    setImages((current) => [
+                      ...current,
+                      {
+                        url: result.url,
+                        alt: `${p.name} — ${p.color} — foto do produto`,
+                      },
+                    ]);
+                  }
+                } catch (error) {
+                  setUploadError((error as Error).message);
+                } finally {
+                  setUploading(false);
+                }
+              }}
+            />
+          </label>
+          <p className="muted">
+            Cadastre cada cor como um produto separado, com suas próprias fotos
+            e quantidades por tamanho. Ajuste a ordem abaixo para escolher a
+            capa.
+          </p>
           {images.map((image, i) => (
             <div className="gallery-row" key={image.id || "new-" + i}>
-              <img src={image.url} alt={image.alt || "Imagem em edição"} />
+              <img
+                src={image.url}
+                alt={image.alt || "Imagem em edição"}
+                loading="lazy"
+              />
               <div>
                 <label>
                   URL da imagem {i + 1}

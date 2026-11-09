@@ -3,9 +3,49 @@ import { HttpsProxyAgent } from "https-proxy-agent";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { randomUUID } from "node:crypto";
 import { HttpError } from "./security";
+import { db } from "./db";
+import sharp from "sharp";
+
+export async function normalizeProductImage(bytes: Buffer) {
+  if (!bytes.length || bytes.length > 5 * 1024 * 1024)
+    throw new HttpError(413, "Imagem deve ter no máximo 5 MB.");
+  try {
+    const image = sharp(bytes, {
+      limitInputPixels: 20_000_000,
+      failOn: "warning",
+    });
+    const metadata = await image.metadata();
+    if (
+      !["jpeg", "png", "webp"].includes(metadata.format || "") ||
+      (metadata.pages || 1) > 1
+    )
+      throw new Error("Unsupported image");
+    const result = await image
+      .rotate()
+      .resize({
+        width: 2400,
+        height: 2400,
+        fit: "inside",
+        withoutEnlargement: true,
+      })
+      .webp({ quality: 85 })
+      .toBuffer({ resolveWithObject: true });
+    if (result.data.length > 5 * 1024 * 1024)
+      throw new HttpError(
+        413,
+        "A imagem otimizada excedeu 5 MB. Reduza as dimensões e tente novamente.",
+      );
+    return result;
+  } catch (error) {
+    if (error instanceof HttpError) throw error;
+    throw new HttpError(
+      400,
+      "Use uma imagem JPEG, PNG ou WebP válida, estática, com até 20 megapixels.",
+    );
+  }
+}
+
 export async function upload(req: Request) {
-  if (!process.env.S3_BUCKET || !process.env.S3_PUBLIC_URL)
-    throw new HttpError(503, "Armazenamento S3 não configurado.");
   const reader = req.body?.getReader();
   if (!reader) throw new HttpError(400, "Arquivo ausente.");
   const chunks: Uint8Array[] = [];
@@ -20,28 +60,37 @@ export async function upload(req: Request) {
     }
     chunks.push(value);
   }
-  const bytes = Buffer.concat(chunks);
-  let ext = "";
-  let type = "";
-  if (bytes.subarray(0, 3).equals(Buffer.from([255, 216, 255]))) {
-    ext = "jpg";
-    type = "image/jpeg";
-  } else if (
-    bytes.subarray(0, 8).equals(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]))
+  const { data: bytes, info } = await normalizeProductImage(
+    Buffer.concat(chunks),
+  );
+  if (
+    process.env.MEDIA_STORAGE === "database" ||
+    (!process.env.S3_BUCKET && process.env.MEDIA_STORAGE !== "s3")
   ) {
-    ext = "png";
-    type = "image/png";
-  } else if (
-    bytes.toString("ascii", 0, 4) === "RIFF" &&
-    bytes.toString("ascii", 8, 12) === "WEBP"
-  ) {
-    ext = "webp";
-    type = "image/webp";
-  } else
-    throw new HttpError(
-      400,
-      "Use JPEG, PNG ou WebP. SVG e arquivos executáveis não são aceitos.",
-    );
+    const asset = await db.$transaction(async (tx) => {
+      await tx.$queryRaw`SELECT pg_advisory_xact_lock(718331)::text`;
+      const used = await tx.mediaAsset.aggregate({ _sum: { size: true } });
+      if ((used._sum.size || 0) + bytes.length > 500 * 1024 * 1024)
+        throw new HttpError(
+          507,
+          "Limite de fotos no banco atingido. Configure armazenamento S3 para ampliar.",
+        );
+      return tx.mediaAsset.create({
+        data: {
+          bytes: new Uint8Array(bytes),
+          size: bytes.length,
+          width: info.width,
+          height: info.height,
+        },
+      });
+    });
+    return { url: `/images/uploads/${asset.id}.webp` };
+  }
+  if (!process.env.S3_BUCKET || !process.env.S3_PUBLIC_URL)
+    throw new HttpError(503, "Armazenamento S3 não configurado.");
+  const publicBase = process.env.S3_PUBLIC_URL.replace(/\/$/, "");
+  if (new URL(publicBase).protocol !== "https:")
+    throw new HttpError(503, "URL pública requer HTTPS.");
   const endpoint = process.env.S3_ENDPOINT;
   if (endpoint && new URL(endpoint).protocol !== "https:")
     throw new HttpError(503, "Endpoint S3 requer HTTPS.");
@@ -64,18 +113,15 @@ export async function upload(req: Request) {
         }
       : {}),
   });
-  const key = `products/${randomUUID()}.${ext}`;
+  const key = `products/${randomUUID()}.webp`;
   await client.send(
     new PutObjectCommand({
       Bucket: process.env.S3_BUCKET,
       Key: key,
       Body: bytes,
-      ContentType: type,
+      ContentType: "image/webp",
       CacheControl: "public,max-age=31536000,immutable",
     }),
   );
-  const publicBase = process.env.S3_PUBLIC_URL.replace(/\/$/, "");
-  if (new URL(publicBase).protocol !== "https:")
-    throw new HttpError(503, "URL pública requer HTTPS.");
   return { url: publicBase + "/" + key };
 }

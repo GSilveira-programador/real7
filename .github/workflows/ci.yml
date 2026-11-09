@@ -32,6 +32,7 @@ jobs:
       - run: npm audit --omit=dev --audit-level=high
       - run: npx playwright install --with-deps chromium
       - run: npm run dev > /tmp/elite-next.log 2>&1 &
+      - run: node scripts/wait-http.mjs && CHROMIUM_PATH=$(node -e "console.log(require('@playwright/test').chromium.executablePath())") npm run test:e2e:bootstrap
       - run: node scripts/wait-http.mjs && CHROMIUM_PATH=$(node -e "console.log(require('@playwright/test').chromium.executablePath())") npm run test:e2e
       - run: npm run build
       - uses: actions/upload-artifact@v4
